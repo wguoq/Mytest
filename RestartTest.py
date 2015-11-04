@@ -31,6 +31,7 @@ logging.getLogger('').addHandler(console)
 
 
 def dotest(driver, url):
+
     if XcloudScript.open_url(driver, url) == 1:
         time.sleep(3)
     else:
@@ -54,6 +55,7 @@ def dotest(driver, url):
         logging.warning('===test fail===')
         return 0
 
+
 if __name__ == '__main__':
     conf = tools.getconfig(open('testconfig.ini', 'r'))
     logging.info(conf)
@@ -66,16 +68,13 @@ if __name__ == '__main__':
     for i in range(num):
         logging.info('====run test==== %s', i+1)
         chrome = webdriver.Chrome()
-        if tools.ping_ok(test_ip):
-            if dotest(chrome, test_url) == 1:
-                chrome.quit()
-            else:
-                fail += 1
-                logging.info("fail times ======== %s", fail)
-                chrome.quit()
+        if dotest(chrome, test_url) == 1:
+            chrome.quit()
+            if tools.ping_ok("www.baidu.com") == 0:
+                logging.warning("====ping baidu fail====")
+                break
         else:
-            logging.info("===ping fail===")
             fail += 1
             logging.info("fail times ======== %s", fail)
             chrome.quit()
-            time.sleep(10)
+

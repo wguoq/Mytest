@@ -64,5 +64,6 @@ while 2 > 1:
     f.write(data + '\n')
     f.close()
     data = ''
-    url.close()
+
+
 

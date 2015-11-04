@@ -4,13 +4,14 @@ import time
 
 
 
-def ping_ok(ip, n=3):
+def ping_ok(ip, n=1):
 #调用系统的ping命令
     for i in range(n):
         return1 = os.system('ping -n 1 -w 1 %s' % ip)
         if return1:
             print('ping host fail ip = ', ip)
             time.sleep(3)
+            return 0
         else:
             print('ping ok')
             return 1
