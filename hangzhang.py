@@ -45,16 +45,16 @@ def dotest2(cmd, delay):
             a = json.JSONDecoder().decode(''.join(lst2))
             allup = str(a.get('up_rate'))
             alldown = str(a.get('down_rate'))
-            data = data + '\t' + date + '\t'+ allup + '\t' + alldown
+            data1 = data + '\t' + date + '\t'+ allup + '\t' + alldown
             for x in lst1[1:]:
                 x = x.split(' ')
-                data = data + '\t' + x[0] + '\t' + x[1] + '\t' + x[2] + '\n'
-            print(data)
-            f = open('hangzhang.txt', 'a')
-            f.write(data)
-            f.close()
-            data = ''
+                data = data1 + '\t' + x[0] + '\t' + x[1] + '\t' + x[2] + '\n'
+                print(data)
+                f = open('hangzhang.txt', 'a')
+                f.write(data)
+                f.close()
+                data = ''
         except Exception as e:
             print(e)
 
-dotest2(ip_rate, 15)
+dotest2(ip_rate, 2)
