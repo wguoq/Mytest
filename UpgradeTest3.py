@@ -24,7 +24,7 @@ logging.getLogger('').addHandler(console)
 def dotest(driver, url):
     try:
         ssh.connect(test_ip, 22, "root", pw)
-        stdin, stdout, stderr = ssh.exec_command(cmd)
+        ssh.exec_command(cmd)
     except Exception as e:
         logging.warning(e)
     if XcloudScript.open_url(driver, url) == 1:
