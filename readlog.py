@@ -31,6 +31,7 @@ if __name__ == '__main__':
     logfile = open('123.txt', 'r')
     first = "Mem"
     log = get_part(logfile, first)
+    logfile.close()
     # print(log[1])
     cpuREX = r"CPU:([0-9]+)%"
     memREX = r"Mem:([0-9]+)K"

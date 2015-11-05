@@ -53,7 +53,9 @@ def dotest(driver, url):
 
 
 if __name__ == '__main__':
-    conf = tools.getconfig(open('testconfig.ini', 'r'))
+    op = open('testconfig.ini', 'r')
+    conf = tools.getconfig(op)
+    op.close()
     logging.info(conf)
     num = int(conf.get("pppoenum"))
     test_ip = conf.get("pppoe_ip")
@@ -62,7 +64,6 @@ if __name__ == '__main__':
     pppoe_pst = conf.get("pppoe_pst2")
     pppoe_pwd = conf.get("pppoe_pwd")
     chrome = webdriver.Chrome()
-
     for i in range(num):
         logging.info('====run test==== %s', i)
         if dotest(chrome, test_url):

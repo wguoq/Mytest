@@ -1,69 +1,64 @@
 import os
-import random
-import paramiko
-
-__author__ = 'hello'
 import requests
-import paramiko
-import json
 import time
-import webbrowser
-
-pan = "http://www.baidu.com"
 
 
-def down(url):
+qq = "http://dldir1.qq.com/qqfile/qq/QQ7.8/16379/QQ7.8.exe"
+
+
+def download(download_url):
     with open('file.zip', 'wb') as f:
         try:
-            print("======start download======")
             st = time.time()
-            f.write(requests.get(url).content)
+            f.write(requests.get(download_url).content)
             end = time.time()
-            print("======download success======")
             t = '%.2f' % ((end - st)*1000)
             return ['success', os.path.getsize('file.zip'), t]
         except Exception as e:
-            print("======download fail======")
             return ['fail', 'error:'+str(e), '0']
+        finally:
+            f.close()
 
 
-#print(down(pan))
-
-
-def get_html(url):
+def get_html(html_url):
     try:
-        print("======start======")
         st = time.time()
-        f = requests.get(url).text
+        text = requests.get(html_url).text
         end = time.time()
-        print("======success======")
-        #print(f)
         t = '%.2f' % ((end - st)*1000)
-        return ['success', f, t]
+        return ['success', text, t]
     except Exception as e:
-        print("======fail======")
         return ['fail', "error:"+str(e), '0']
 
-#print(get_html(pan))
 
-data = ''
-while 2 > 1:
-    url = open("10url", 'r').readlines()
-    for l in url:
-        l = l.strip()
-        print(l)
-        a = get_html(l)
-        if a[0] == 'success':
-            print(a[2])
-            data = data+'\t'+l+'\t'+a[2]
-        if a[0] == 'fail':
-            print(a[1])
-            data = data+'\t'+l+'\t'+a[2]
-        time.sleep(1)
+def dotest():
     f = open('ttt.txt', 'a')
-    f.write(data + '\n')
+    while 2 > 1:
+        op = open('10url', 'r')
+        url = op.readlines()
+        op.close()
+        for l in url:
+            l = l.strip()
+            a = get_html(l)
+            time.sleep(2)
+            data = l+'\t'+a[2]
+            print(data)
+            f.write(data+'\n')
+            f.flush()
     f.close()
-    data = ''
 
 
+def dotest2():
+    f = open('ttt.txt', 'a')
+    while 2 > 1:
+        print('downloading')
+        a = download(qq)
+        data = a[0]+'\t'+a[1]+'\t'+a[2]
+        print(data)
+        f.write(data)
+        f.flush()
+        time.sleep(5)
+    f.close()
+
+dotest2()
 

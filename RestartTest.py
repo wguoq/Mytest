@@ -57,7 +57,9 @@ def dotest(driver, url):
 
 
 if __name__ == '__main__':
-    conf = tools.getconfig(open('testconfig.ini', 'r'))
+    op = open('testconfig.ini', 'r')
+    conf = tools.getconfig(op)
+    op.close()
     logging.info(conf)
     num = int(conf.get("restartnum"))
     test_ip = conf.get("restart_ip")

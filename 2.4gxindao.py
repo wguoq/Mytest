@@ -38,65 +38,50 @@ def channel(i):
         time.sleep(3)
         driver.find_element_by_css_selector("a.subbtn.saveStatus > b").click()
         time.sleep(3)
-        return True
+        return 1
     except Exception as e:
         print(e)
-        return False
+        return 0
 
 
 def dotest():
     ts = 1
     o = 0
-    while o < 5:
+    while o < 3:
+        f = open("xindao.log", "a")
         for i in range(14):
-            if i == 0:
-                continue
-            i = str(i)
+            i = str(i+1)
             a = "channel=="+i
             b = "times=="+str(ts)
             lock.acquire()
-            f = open("xindao.log", "a")
             f.write(a + "\n")
             f.write(b + "\n")
-            f.close()
+            f.flush()
             lock.release()
-            if channel(i):
+            if channel(i) == 1:
                 o = 0
                 ts += 1
                 time.sleep(40)
             else:
                 o += 1
                 ts += 1
-
-
-
-def get_time():
-    a = 123
-    while a > 0:
-        s = time.ctime(time.time())
-        lock.acquire()
-        f = open("xindao.log", "a")
-        f.write(s + "\n")
+                time.sleep(40)
         f.close()
-        lock.release()
-        time.sleep(300)
 
-
-
-if __name__ == '__main__':
-    conf = tools2.getconfig(open('testconfig.ini', 'r'))
-    test_ip = conf.get("reset_ip")
-    test_url = 'http://'+test_ip
-    pw = conf.get("pw")
-    driver = webdriver.Chrome()
-    com = "COM3"
-    serlog = "xindao.log"
-    lock = threading.RLock()
-    t1 = threading.Thread(target=tools2.get_serial_log, args=(com, serlog, lock))
-    t2 = threading.Thread(target=dotest)
-    t3 = threading.Thread(target=get_time)
-    threads = [t1, t2]
-    for t in threads:
-        time.sleep(1)
-        t.start()
+op = open('testconfig.ini', 'r')
+conf = tools2.getconfig(op)
+op.close()
+test_ip = conf.get("reset_ip")
+test_url = 'http://'+test_ip
+pw = conf.get("pw")
+driver = webdriver.Chrome()
+com = "COM3"
+serlog = "xindao.log"
+lock = threading.RLock()
+t1 = threading.Thread(target=tools2.get_serial_log, args=(com, serlog, lock))
+t2 = threading.Thread(target=dotest)
+threads = [t1, t2]
+for t in threads:
+    time.sleep(1)
+    t.start()
 

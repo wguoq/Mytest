@@ -49,13 +49,13 @@ def dotest(driver, url):
 
 def get_test_result(testlog):
     fail = 0
+    f = open(testlog, "a")
     for i in range(num):
         x = "====run test==== " + str(i+1)
         logging.info(x)
         lock.acquire()
-        f = open(testlog, "a")
         f.write(x + "\n")
-        f.close()
+        f.flush()
         lock.release()
         if tools2.ping_ok(test_ip) == 1:
             time.sleep(5)
@@ -69,25 +69,24 @@ def get_test_result(testlog):
                 a = " =======test fail======== " + str(fail)
                 time.sleep(1)
                 lock.acquire()
-                f = open(testlog, "a")
                 f.write(a + "\n")
-                f.close()
+                f.flush()
                 lock.release()
-
         else:
             fail += 1
             a = " =======ping fail======== " + str(fail)
             time.sleep(1)
             lock.acquire()
-            f = open(testlog, "a")
             f.write(a + "\n")
-            f.close()
+            f.flush()
             lock.release()
             time.sleep(10)
+    f.close()
 
 
-config = open('testconfig.ini', 'r')
-conf = tools2.getconfig(config)
+op = open('testconfig.ini', 'r')
+conf = tools2.getconfig(op)
+op.close()
 logging.info(conf)
 num = int(conf.get("restartnum"))
 test_ip = conf.get("restart_ip")
@@ -100,6 +99,5 @@ lock = threading.RLock()
 t1 = threading.Thread(target=tools2.get_serial_log, args=(port, file, lock,))
 t2 = threading.Thread(target=get_test_result, args=(file,))
 threads = [t1, t2]
-
 for t in threads:
     t.start()

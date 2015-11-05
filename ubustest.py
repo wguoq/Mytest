@@ -37,7 +37,6 @@ def dolog(file, s):
 def dotest(cmd, delay, func):
     f = open(cmd[0], "a")
     func(f, time.ctime(time.time()))
-    f.close()
     for i in range(5):
         time.sleep(delay)
         try:
@@ -46,9 +45,8 @@ def dotest(cmd, delay, func):
             m = time.time()
             b = '%.4f' % ((m - n)*1000)
             print(b)
-            f = open(cmd[0], "a")
             f.write(b + "\n")
-            f.close()
+            f.flush()
             lst = stdout.readlines()
             a = json.JSONDecoder().decode(''.join(lst))
             #print(a)
@@ -60,7 +58,6 @@ def dotest(cmd, delay, func):
                 logging.info("time out")
         except Exception as e:
             logging.error(e)
-    f = open(cmd[0], "a")
     func(f, time.ctime(time.time()))
     f.close()
 

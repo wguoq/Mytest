@@ -33,22 +33,21 @@ def getconfig(file):
 def get_serial_log(com, serlog, lock):
     ser = serial.Serial(port=com, baudrate=115200)
     print(ser.portstr)
-    i = 1
-    while i > 0:
+    f = open(serlog, "a")
+    while 2 > 1:
         data = str(ser.readline())
-        data = data.replace("\\r", "")
-        data = data.replace("\\n", "")
-        data = data.replace("b'", "")
         if data:
+            data = data.replace("\\r", "")
+            data = data.replace("\\n", "")
+            data = data.replace("b'", "")
             lock.acquire()
-            f = open(serlog, "a")
             f.write(data + "\n")
-            f.close()
+            f.flush()
             lock.release()
-            i += 1
             print(data)
         else:
             continue
+    f.close()
 
 
 def uci_cmd(ssh_connection, cmd, flag):

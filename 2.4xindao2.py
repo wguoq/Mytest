@@ -1,4 +1,4 @@
-__author__ = 'hello'
+# -*- coding:utf-8 -*-
 import paramiko
 import time
 
@@ -24,3 +24,4 @@ while 2 > 1:
             time.sleep(60)
         except Exception as e:
             print(e)
+            time.sleep(60)
