@@ -45,15 +45,15 @@ def channel(i):
 
 
 def dotest():
-    ts = 1
+    times = 1
     o = 0
     while o < 3:
         f = open("xindao.log", "a")
         for i in range(13):
             i = str(i+1)
             a = "channel=="+i
-            b = "times=="+str(ts)
-            print(i)
+            b = "times=="+str(times)
+            print(times)
             lock.acquire()
             f.write(a + "\n")
             f.write(b + "\n")
@@ -61,11 +61,11 @@ def dotest():
             lock.release()
             if channel(i) == 1:
                 o = 0
-                ts += 1
+                times += 1
                 time.sleep(40)
             else:
                 o += 1
-                ts += 1
+                times += 1
                 time.sleep(40)
         f.close()
 
@@ -83,6 +83,7 @@ lock = threading.RLock()
 t1 = threading.Thread(target=tools2.get_serial_log, args=(com, serlog, lock))
 t2 = threading.Thread(target=dotest)
 t2.start()
+
 '''
 threads = [t1, t2]
 for t in threads:
