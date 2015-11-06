@@ -7,7 +7,7 @@ ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 ssh.connect('192.168.99.1', 22, 'root', '12345678')
 o = 0
 while 2 > 1:
-    for i in range(14):
+    for i in range(13):
         try:
             i += 1
             cmd = 'uci set wireless.ra0.channel='+str(i)

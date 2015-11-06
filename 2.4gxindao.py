@@ -49,10 +49,11 @@ def dotest():
     o = 0
     while o < 3:
         f = open("xindao.log", "a")
-        for i in range(14):
+        for i in range(13):
             i = str(i+1)
             a = "channel=="+i
             b = "times=="+str(ts)
+            print(i)
             lock.acquire()
             f.write(a + "\n")
             f.write(b + "\n")
@@ -68,6 +69,7 @@ def dotest():
                 time.sleep(40)
         f.close()
 
+
 op = open('testconfig.ini', 'r')
 conf = tools2.getconfig(op)
 op.close()
@@ -80,8 +82,10 @@ serlog = "xindao.log"
 lock = threading.RLock()
 t1 = threading.Thread(target=tools2.get_serial_log, args=(com, serlog, lock))
 t2 = threading.Thread(target=dotest)
+t2.start()
+'''
 threads = [t1, t2]
 for t in threads:
     time.sleep(1)
     t.start()
-
+'''
