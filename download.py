@@ -1,64 +1,65 @@
-import os
-import requests
+# -*- coding=utf-8 -*-
+import contextlib
 import time
+import urllib.request
+import sys
+import logging
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(filename)s %(levelname)s %(message)s',
+                    datefmt='%a, %d %b %Y %H:%M:%S',
+                    filename='down.log',
+                    filemode='w')
+#################################################################################################
+# 定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，并将其添加到当前的日志处理对象#
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
+console.setFormatter(formatter)
+logging.getLogger('').addHandler(console)
+#################################################################################################
 
 
 qq = "http://dldir1.qq.com/qqfile/qq/QQ7.8/16379/QQ7.8.exe"
+tudou = 'http://tudou.com'
+local = 'http://127.0.0.1/180.zip'
 
 
-def download(download_url):
-    with open('file.zip', 'wb') as f:
-        try:
-            st = time.time()
-            f.write(requests.get(download_url).content)
-            end = time.time()
-            t = '%.2f' % ((end - st)*1000)
-            return ['success', os.path.getsize('file.zip'), t]
-        except Exception as e:
-            return ['fail', 'error:'+str(e), '0']
-        finally:
-            f.close()
+def report(blockCount, blockSize, totalSize):
+    percent = int(blockCount*blockSize*100/totalSize)
+    sys.stdout.write("\r%d%%" % percent + ' complete ')
+    sys.stdout.flush()
 
 
-def get_html(html_url):
+def download(url, localfile='temp'):
     try:
-        st = time.time()
-        text = requests.get(html_url).text
-        end = time.time()
-        t = '%.2f' % ((end - st)*1000)
-        return ['success', text, t]
+        with contextlib.closing(urllib.request.urlopen(url, data=None)) as fp:
+            headers = fp.info()
+            print(headers)
+            if "content-length" in headers:
+                size = int(headers["Content-Length"])
+                s = time.time()
+                urllib.request.urlretrieve(url, localfile, reporthook=report)
+                e = time.time()
+                t = e - s
+                return {'result': 'success', 'localfile': localfile, 'size': size, 'time': t}
     except Exception as e:
-        return ['fail', "error:"+str(e), '0']
+        return {'result': e, 'localfile': None, 'size': 0, 'time': 0}
 
 
-def dotest():
-    f = open('ttt.txt', 'a')
-    while 2 > 1:
-        op = open('10url', 'r')
-        url = op.readlines()
-        op.close()
-        for l in url:
-            l = l.strip()
-            a = get_html(l)
-            time.sleep(2)
-            data = l+'\t'+a[2]
-            print(data)
-            f.write(data+'\n')
-            f.flush()
-    f.close()
-
-
-def dotest2():
-    f = open('ttt.txt', 'a')
-    while 2 > 1:
-        print('downloading')
-        a = download(qq)
-        data = a[0]+'\t'+a[1]+'\t'+a[2]
+def dotest(url, delay):
+    while 1:
+        data = download(url)
         print(data)
-        f.write(data)
-        f.flush()
-        time.sleep(5)
-    f.close()
+        if data.get('result') == 'success':
+            size = round(data.get('size')/1024, 2)
+            print(size)
+            t = round(data.get('time'), 2)
+            print(t)
+            speed = round(size/t, 2)
+            print(speed)
+            logging.info(data.get('localfile')+'\t'+str(size)+'KB'+'\t'+str(t)+'s'+'\t'+str(speed)+'KB/s')
+        time.sleep(delay)
 
-dotest2()
 
+dotest(qq, 60)
