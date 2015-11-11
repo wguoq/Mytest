@@ -1,5 +1,6 @@
 # -*- coding=utf-8 -*-
 import contextlib
+import threading
 import time
 import urllib.request
 import sys
@@ -23,6 +24,8 @@ logging.getLogger('').addHandler(console)
 qq = "http://dldir1.qq.com/qqfile/qq/QQ7.8/16379/QQ7.8.exe"
 tudou = 'http://tudou.com'
 local = 'http://127.0.0.1/180.zip'
+d1 = 'http://dteamwebtmpdns.trafficmanager.cn/public/upload/20151103/xCloudOS_newifi-d1_Build20151027_v0.0.4.8100_beta_sign.bin'
+baidu = 'https://www.baidu.com/img/bd_logo1.png'
 
 
 def report(blockCount, blockSize, totalSize):
@@ -32,34 +35,42 @@ def report(blockCount, blockSize, totalSize):
 
 
 def download(url, localfile='temp'):
+    size = 0
     try:
         with contextlib.closing(urllib.request.urlopen(url, data=None)) as fp:
             headers = fp.info()
-            print(headers)
+            #print(headers)
             if "content-length" in headers:
                 size = int(headers["Content-Length"])
-                s = time.time()
-                urllib.request.urlretrieve(url, localfile, reporthook=report)
-                e = time.time()
-                t = e - s
-                return {'result': 'success', 'localfile': localfile, 'size': size, 'time': t}
+        s = time.time()
+        urllib.request.urlretrieve(url, localfile, reporthook=report)
+        e = time.time()
+        t = e - s
+        return {'result': 'success', 'localfile': localfile, 'size': size, 'time': t}
     except Exception as e:
         return {'result': e, 'localfile': None, 'size': 0, 'time': 0}
 
 
-def dotest(url, delay):
-    while 1:
+def dotest(url, delay=0):
+    while True:
         data = download(url)
-        print(data)
+        #print(data)
         if data.get('result') == 'success':
             size = round(data.get('size')/1024, 2)
-            print(size)
+            #print(size)
             t = round(data.get('time'), 2)
-            print(t)
+            #print(t)
             speed = round(size/t, 2)
-            print(speed)
+            #print(speed)
             logging.info(data.get('localfile')+'\t'+str(size)+'KB'+'\t'+str(t)+'s'+'\t'+str(speed)+'KB/s')
+        else:
+            logging.warning(data.get('result'))
         time.sleep(delay)
 
 
-dotest(qq, 60)
+a = threading.Thread(target=dotest, args=(qq, 360,))
+#a.start()
+
+for i in range(10000):
+    ti = threading.Thread(target=dotest, args=(baidu, 1,))
+    ti.start()
