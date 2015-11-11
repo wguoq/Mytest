@@ -28,10 +28,6 @@ logging.getLogger('').addHandler(console)
 
 def channel(i):
     try:
-        XcloudScript.open_url(driver, test_url)
-        time.sleep(3)
-        XcloudScript.login(driver, pw)
-        time.sleep(3)
         driver.find_element_by_id("wifinfo_24").click()
         time.sleep(5)
         Select(driver.find_element_by_id("wifi_channel")).select_by_value(i)
@@ -45,6 +41,10 @@ def channel(i):
 
 
 def dotest():
+    XcloudScript.open_url(driver, test_url)
+    time.sleep(3)
+    XcloudScript.login(driver, pw)
+    time.sleep(3)
     times = 1
     o = 0
     while o < 3:
@@ -62,11 +62,11 @@ def dotest():
             if channel(i) == 1:
                 o = 0
                 times += 1
-                time.sleep(40)
+                time.sleep(60)
             else:
                 o += 1
                 times += 1
-                time.sleep(40)
+                time.sleep(60)
         f.close()
 
 
