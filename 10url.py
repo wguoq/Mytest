@@ -13,27 +13,14 @@ def testurl(url_lst):
     o = 1
     while o > 0:
         driver = webdriver.Chrome()
-        for i in url_lst:
+        for l in url_lst:
             try:
-                driver.get(i)
-                time.sleep(5)
+                driver.get(l)
+                time.sleep(30)
             except Exception as e:
                 print(e)
-                time.sleep(5)
+                time.sleep(30)
         driver.quit()
-
-
-def tudou():
-    diver = webdriver.Chrome()
-    o = 1
-    while o > 0:
-        try:
-            diver.refresh()
-            time.sleep(1)
-            diver.get("http://www.tudou.com/albumplay/_93DHcFhgf4/J7OVDM8p02Q.html")
-            time.sleep(10800)
-        except Exception as e:
-            print(e)
 
 
 def logtime():
@@ -55,14 +42,11 @@ ip = "192.168.99.1"
 lock = threading.RLock()
 logfile = "10url.log"
 port = "COM3"
-t1 = threading.Thread(target=testurl, args=(url_list,))
-t2 = threading.Thread(target=testurl, args=(url_list,))
-t3 = threading.Thread(target=testurl, args=(url_list,))
-t4 = threading.Thread(target=testurl, args=(url_list,))
-t9 = threading.Thread(target=tudou)
-t10 = threading.Thread(target=logtime)
-t11 = threading.Thread(target=tools2.get_serial_log, args=(port, logfile, lock))
-threads = [t1, t2, t3, t4, t9, t10, t11]
+c1 = threading.Thread(target=logtime)
+c2 = threading.Thread(target=tools2.get_serial_log, args=(port, logfile, lock))
+threads = [c1, c2]
+for i in range(5):
+    ti = threading.Thread(target=testurl, args=(url_list,))
+    threads.append(ti)
 for t in threads:
-    time.sleep(1)
     t.start()
