@@ -14,6 +14,7 @@ from selenium import webdriver
 import time
 import XcloudScript
 import tools
+import urllib.request
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
@@ -31,7 +32,6 @@ logging.getLogger('').addHandler(console)
 
 
 def dotest(driver, url):
-
     if XcloudScript.open_url(driver, url) == 1:
         time.sleep(3)
     else:
@@ -49,10 +49,8 @@ def dotest(driver, url):
     else:
         return 0
     if XcloudScript.login(driver, pw) == 1:
-        logging.info('test success')
         return 1
     else:
-        logging.warning('===test fail===')
         return 0
 
 
@@ -67,16 +65,26 @@ if __name__ == '__main__':
     pw = conf.get("pw")
     wait_time = int(conf.get("wait_time1"))
     fail = 0
+    baidu = 'https://www.baidu.com'
     for i in range(num):
         logging.info('====run test==== %s', i+1)
         chrome = webdriver.Chrome()
         if dotest(chrome, test_url) == 1:
             chrome.quit()
-            if tools.ping_ok("www.baidu.com") == 0:
-                logging.warning("====ping baidu fail====")
-                break
+            try:
+                print('request')
+                urllib.request.urlretrieve(baidu)
+                time.sleep(1)
+                logging.info('test success')
+            except Exception as e:
+                logging.warning(e)
+                logging.warning('====request '+baidu+' fail====')
+                fail += 1
+                logging.info("fail times ======== %s", fail)
+                time.sleep(1)
         else:
             fail += 1
+            logging.info('====test fail====')
             logging.info("fail times ======== %s", fail)
             chrome.quit()
 
