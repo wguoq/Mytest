@@ -51,26 +51,31 @@ def download(url, localfile='temp'):
         return {'result': e, 'localfile': None, 'size': 0, 'time': 0}
 
 
-def dotest(url, delay=0):
+def dotest(url, delay=1):
     while True:
         data = download(url)
-        #print(data)
         if data.get('result') == 'success':
             size = round(data.get('size')/1024, 2)
-            #print(size)
             t = round(data.get('time'), 2)
-            #print(t)
             speed = round(size/t, 2)
-            #print(speed)
             logging.info(data.get('localfile')+'\t'+str(size)+'KB'+'\t'+str(t)+'s'+'\t'+str(speed)+'KB/s')
         else:
             logging.warning(data.get('result'))
         time.sleep(delay)
 
-
 a = threading.Thread(target=dotest, args=(qq, 360,))
-#a.start()
-
-for i in range(10000):
-    ti = threading.Thread(target=dotest, args=(baidu, 1,))
+a.start()
+threads = [a]
+'''
+for i in range(1000):
+    ti = threading.Thread(target=dotest, args=(baidu,))
     ti.start()
+'''
+
+'''
+for i in range(1000):
+    ti = threading.Thread(target=dotest, args=(baidu,))
+    threads.append(ti)
+for t in threads:
+    t.start()
+'''
