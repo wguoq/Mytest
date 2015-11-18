@@ -7,10 +7,10 @@ import time
 from selenium import webdriver
 
 
-def openweb(urllist, delay):
+def openweb(urlist, delay):
     while True:
         driver = webdriver.Chrome()
-        for l in urllist:
+        for l in urlist:
             try:
                 driver.get(l)
                 time.sleep(delay)
