@@ -66,14 +66,18 @@ if __name__ == '__main__':
     wait_time = int(conf.get("wait_time1"))
     fail = 0
     baidu = 'https://www.baidu.com'
+    qq = 'http://www.qq.com/'
     for i in range(num):
         logging.info('====run test==== %s', i+1)
         chrome = webdriver.Chrome()
         if dotest(chrome, test_url) == 1:
             chrome.quit()
             try:
-                print('request')
+                print('request baidu')
                 urllib.request.urlretrieve(baidu)
+                time.sleep(1)
+                print('request qq')
+                urllib.request.urlretrieve(qq)
                 time.sleep(1)
                 logging.info('test success')
             except Exception as e:
