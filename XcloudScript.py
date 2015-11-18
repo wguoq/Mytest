@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import Select
 def open_url(driver, url):
     time.sleep(1)
     try:
-        logging.info("try open url...")
+        logging.info("try open "+url)
         driver.get(url)
         if driver.find_element_by_id("focus_password"):
             return 1
@@ -20,7 +20,7 @@ def open_url(driver, url):
 def login(driver, password):
     time.sleep(1)
     try:
-        logging.info("try login...")
+        logging.info("try login password = "+password)
         driver.find_element_by_id("focus_password").clear()
         driver.find_element_by_id("focus_password").send_keys(password)
         driver.find_element_by_css_selector("img.login_form_img").click()
@@ -35,7 +35,7 @@ def login(driver, password):
 def login_y1(driver, password):
     time.sleep(1)
     try:
-        logging.info("try login...")
+        logging.info("try login password = "+password)
         driver.find_element_by_id("focus_password").clear()
         driver.find_element_by_id("focus_password").send_keys(password)
         driver.find_element_by_css_selector("img.login_form_img").click()
@@ -52,7 +52,7 @@ def login_y1(driver, password):
 def set_5ssid(driver, value):
     time.sleep(1)
     try:
-        logging.info("try set 5G ssid...")
+        logging.info("try set 5G ssid = "+value)
         driver.find_element_by_id("wifinfo_5").click()
         time.sleep(5)
         driver.find_element_by_css_selector("input.netssid.setwireturn_input").clear()
@@ -72,7 +72,7 @@ def set_5ssid(driver, value):
 def set_24ssid(driver, value):
     time.sleep(1)
     try:
-        logging.info("try set 2.4G ssid...")
+        logging.info("try set 2.4G ssid = "+value)
         driver.find_element_by_id("wifinfo_24").click()
         time.sleep(5)
         driver.find_element_by_css_selector("input.netssid.setwireturn_input").clear()
@@ -153,7 +153,7 @@ def restart(driver, wait_time):
 
 def upgrade(driver, build, wait_time):
     try:
-        logging.info("try upgrade...")
+        logging.info("try upgrade to "+build)
         driver.find_element_by_link_text(u"固件升级").click()
         time.sleep(5)
         driver.find_element_by_id("firmware_file").send_keys(build)
