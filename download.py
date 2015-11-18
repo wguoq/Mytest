@@ -22,9 +22,6 @@ logging.getLogger('').addHandler(console)
 
 
 qq = "http://dldir1.qq.com/qqfile/qq/QQ7.8/16379/QQ7.8.exe"
-tudou = 'http://tudou.com'
-local = 'http://127.0.0.1/180.zip'
-d1 = 'http://dteamwebtmpdns.trafficmanager.cn/public/upload/20151103/xCloudOS_newifi-d1_Build20151027_v0.0.4.8100_beta_sign.bin'
 baidu = 'https://www.baidu.com/img/bd_logo1.png'
 
 
