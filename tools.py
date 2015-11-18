@@ -28,18 +28,17 @@ def getconfig(file):
     return dict2
 
 
-def write_ser_log(log, logfile):
-    f = open(logfile, "a")
+def write_ser_log(log, file):
     if None != log:
         log = log.replace("\\r", "")
         log = log.replace("\\n", "")
         log = log.replace("b'", "")
-        f.write(log + "\n")
-        f.flush()
+        file.write(log + "\n")
+        file.flush()
         print(log)
     else:
         pass
-    f.close()
+
 
 
 def uci_cmd(ssh_connection, cmd, flag):

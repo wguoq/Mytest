@@ -4,7 +4,6 @@
 #######################
 
 import logging
-import threading
 import time
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
@@ -69,4 +68,3 @@ test_url = 'http://'+test_ip
 pw = conf.get("pw")
 chrome = webdriver.Chrome()
 dotest(chrome)
-
