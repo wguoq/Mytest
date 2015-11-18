@@ -2,51 +2,28 @@
 ###################
 #   刷网页挂机测试
 ###################
-
 import threading
 import time
 from selenium import webdriver
-import tools2
 
 
-def testurl(url_lst):
-    o = 1
-    while o > 0:
+def openweb(urllist, delay):
+    while True:
         driver = webdriver.Chrome()
-        for l in url_lst:
+        for l in urllist:
             try:
                 driver.get(l)
-                time.sleep(30)
+                time.sleep(delay)
             except Exception as e:
                 print(e)
-                time.sleep(30)
+                time.sleep(delay)
         driver.quit()
 
 
-def logtime():
-    f = open(logfile)
-    while 2 > 1:
-        date = time.ctime(time.time())
-        lock.acquire()
-        f.write(date+"\n")
-        f.flush()
-        lock.release()
-        print(date)
-        time.sleep(3600)
-    f.close()
-
-op = open("10url", "r")
-url_list = op.readlines()
+op = open("URLlist", "r")
+url_lst = op.readlines()
 op.close()
-ip = "192.168.99.1"
-lock = threading.RLock()
-logfile = "10url.log"
-port = "COM3"
-c1 = threading.Thread(target=logtime)
-c2 = threading.Thread(target=tools2.get_serial_log, args=(port, logfile, lock))
-threads = [c1, c2]
 for i in range(5):
-    ti = threading.Thread(target=testurl, args=(url_list,))
-    threads.append(ti)
-for t in threads:
-    t.start()
+    ti = threading.Thread(target=openweb, args=(url_lst, 120,))
+    time.sleep(10)
+    ti.start()
