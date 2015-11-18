@@ -9,7 +9,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
 import XcloudScript
-import tools2
+import tools
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
@@ -62,7 +62,7 @@ def dotest(driver):
 
 
 op = open('testconfig.ini', 'r')
-conf = tools2.getconfig(op)
+conf = tools.getconfig(op)
 op.close()
 test_ip = conf.get("reset_ip")
 test_url = 'http://'+test_ip
