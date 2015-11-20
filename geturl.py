@@ -12,6 +12,7 @@ def openweb(urlist, delay):
         driver = webdriver.Chrome()
         for l in urlist:
             try:
+                l = l.strip()
                 driver.get(l)
                 time.sleep(delay)
             except Exception as e:

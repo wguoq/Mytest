@@ -33,10 +33,11 @@ def report(blockCount, blockSize, totalSize):
 
 def download(url, localfile='temp'):
     size = 0
+    url = url.strip()
     try:
         with contextlib.closing(urllib.request.urlopen(url, data=None)) as fp:
             headers = fp.info()
-            #print(headers)
+            print(headers)
             if "content-length" in headers:
                 size = int(headers["Content-Length"])
         s = time.time()

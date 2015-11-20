@@ -19,8 +19,7 @@ def getconfig(file):
     line = file.readlines()
     dict2 = dict()
     for l in line:
-        l = l.replace(" ", "")
-        l = l.replace("\n", "")
+        l = l.strip()
         l = l.split("=")
         if len(l) >= 2:
             dict1 = {l[0]: l[1]}
