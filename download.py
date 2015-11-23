@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
                     filename='qq.log',
-                    filemode='w')
+                    filemode='a')
 #################################################################################################
 # 定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，并将其添加到当前的日志处理对象#
 console = logging.StreamHandler()
