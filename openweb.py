@@ -7,7 +7,7 @@ import time
 from selenium import webdriver
 
 
-def openweb(urlist, delay):
+def open_web(urlist, delay):
     while True:
         driver = webdriver.Chrome()
         for l in urlist:
@@ -25,6 +25,6 @@ op = open("URLlist", "r")
 url_lst = op.readlines()
 op.close()
 for i in range(5):
-    ti = threading.Thread(target=openweb, args=(url_lst, 120,))
+    ti = threading.Thread(target=open_web, args=(url_lst, 120,))
     time.sleep(10)
     ti.start()
