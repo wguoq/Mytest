@@ -9,7 +9,7 @@ import logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='down.log',
+                    filename='qq.log',
                     filemode='w')
 #################################################################################################
 # 定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，并将其添加到当前的日志处理对象#
@@ -35,15 +35,13 @@ def download(url, localfile='temp'):
     size = 0
     url = url.strip()
     try:
-        with contextlib.closing(urllib.request.urlopen(url, data=None)) as fp:
-            headers = fp.info()
-            print(headers)
-            if "content-length" in headers:
-                size = int(headers["Content-Length"])
         s = time.time()
-        urllib.request.urlretrieve(url, localfile, reporthook=report)
+        result = urllib.request.urlretrieve(url, localfile, reporthook=report)
         e = time.time()
         t = e - s
+        headers = result[1]
+        if 'Content-Length' in headers:
+            size = int(headers['Content-Length'])
         return {'result': 'success', 'localfile': localfile, 'size': size, 'time': t}
     except Exception as e:
         return {'result': e, 'localfile': None, 'size': 0, 'time': 0}
