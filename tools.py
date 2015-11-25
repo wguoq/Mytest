@@ -32,12 +32,13 @@ def write_ser_log(log, file):
         log = log.replace("\\r", "")
         log = log.replace("\\n", "")
         log = log.replace("b'", "")
+        log = log.replace("'", "")
+        log = log.strip()
         file.write(log + "\n")
         file.flush()
         print(log)
     else:
         pass
-
 
 
 def uci_cmd(ssh_connection, cmd, flag):
