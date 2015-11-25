@@ -1,10 +1,11 @@
 # -*- coding:utf-8 -*-
-import contextlib
 import threading
 import time
 import urllib.request
 import sys
 import logging
+import socket
+import random
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s %(message)s',
@@ -23,6 +24,9 @@ logging.getLogger('').addHandler(console)
 
 qq = "http://dldir1.qq.com/qqfile/qq/QQ7.8/16379/QQ7.8.exe"
 baidu = 'https://www.baidu.com/img/bd_logo1.png'
+baiqq = 'http://dlsw.baidu.com/sw-search-sp/soft/3a/12350/QQ_7.8.16379.0_setup.1446522220.exe'
+
+socket.setdefaulttimeout(300)
 
 
 def report(blockCount, blockSize, totalSize):
@@ -47,31 +51,26 @@ def download(url, localfile='temp'):
         return {'result': e, 'localfile': None, 'size': 0, 'time': 0}
 
 
-def dotest(url, delay=1):
-    while True:
-        data = download(url)
-        if data.get('result') == 'success':
-            size = round(data.get('size')/1024, 2)
-            t = round(data.get('time'), 2)
-            speed = round(size/t, 2)
-            logging.info(data.get('localfile')+'\t'+str(size)+'KB'+'\t'+str(t)+'s'+'\t'+str(speed)+'KB/s')
-        else:
-            logging.warning(data.get('result'))
-        time.sleep(delay)
+def dotest(url, delay=60):
+    #while True:
+    print(time.ctime(time.time()))
+    print('start download')
+    #print('delay = ', delay)
+    data = download(url)
+    if data.get('result') == 'success':
+        size = round(data.get('size')/1024, 2)
+        t = round(data.get('time'), 2)
+        speed = round(size/t, 2)
+        logging.info(data.get('localfile')+'\t'+str(size)+'KB'+'\t'+str(t)+'s'+'\t'+str(speed)+'KB/s')
+    else:
+        logging.warning(data.get('result'))
+    time.sleep(delay)
 
-a = threading.Thread(target=dotest, args=(qq, 360,))
-a.start()
-threads = [a]
+while True:
+    dotest(baiqq, random.randint(60, 120))
+
 '''
 for i in range(1000):
-    ti = threading.Thread(target=dotest, args=(baidu,))
+    ti = threading.Thread(target=dotest, args=(baidu, 30))
     ti.start()
-'''
-
-'''
-for i in range(1000):
-    ti = threading.Thread(target=dotest, args=(baidu,))
-    threads.append(ti)
-for t in threads:
-    t.start()
 '''
