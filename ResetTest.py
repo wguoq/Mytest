@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
                     filename='reset.log',
-                    filemode='w')
+                    filemode='a')
 #################################################################################################
 # 定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，并将其添加到当前的日志处理对象#
 console = logging.StreamHandler()
@@ -54,15 +54,15 @@ def initialize(driver, url):
         time.sleep(30)
         wan = detect_wan(driver)
         if wan == 0:
-            print('wan = 0')
+            logging.info('wan = 跳过检测')
             driver.find_element_by_link_text(u"跳过检测").click()
         else:
             if 'DHCP' == wan:
-                logging.info('wan= '+wan)
+                logging.info('wan = '+wan)
                 driver.find_element_by_link_text(u"下一步").click()
                 time.sleep(10)
             if '运营商' == wan:
-                logging.info('wan= '+wan)
+                logging.info('wan = '+wan)
                 #TODO
         time.sleep(3)
         driver.find_element_by_id("key").clear()
