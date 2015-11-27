@@ -12,7 +12,7 @@
 import logging
 from selenium import webdriver
 import time
-import XcloudScript
+import Page_script
 import tools
 import urllib.request
 
@@ -32,23 +32,23 @@ logging.getLogger('').addHandler(console)
 
 
 def dotest(driver, url):
-    if XcloudScript.open_url(driver, url) == 1:
+    if Page_script.open_url(driver, url) == 1:
         time.sleep(3)
     else:
         return 0
-    if XcloudScript.login(driver, pw) == 1:
+    if Page_script.login(driver, pw) == 1:
         time.sleep(3)
     else:
         return 0
-    if XcloudScript.restart(driver, wait_time) == 1:
+    if Page_script.restart(driver, wait_time) == 1:
         time.sleep(3)
     else:
         return 0
-    if XcloudScript.open_url(driver, url) == 1:
+    if Page_script.open_url(driver, url) == 1:
         time.sleep(3)
     else:
         return 0
-    if XcloudScript.login(driver, pw) == 1:
+    if Page_script.login(driver, pw) == 1:
         return 1
     else:
         return 0

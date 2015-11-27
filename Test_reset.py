@@ -13,7 +13,7 @@
 import logging
 import time
 from selenium import webdriver
-import XcloudScript
+import Page_script
 import tools
 
 logging.basicConfig(level=logging.INFO,
@@ -81,32 +81,32 @@ def initialize(driver, url):
 
 def dotest(driver, url):
     initialize(driver, url)
-    if XcloudScript.open_url(driver, test_url) == 1:
+    if Page_script.open_url(driver, test_url) == 1:
         time.sleep(3)
     else:
         return 0
-    if XcloudScript.login(driver, pw) == 1:
+    if Page_script.login(driver, pw) == 1:
         time.sleep(3)
     else:
         return 0
-    if XcloudScript.set_5ssid(driver, new_ssid) == 1:
+    if Page_script.set_5ssid(driver, new_ssid) == 1:
         time.sleep(3)
     else:
         return 0
-    if XcloudScript.reset(driver, wait_time) == 1:
+    if Page_script.reset(driver, wait_time) == 1:
         time.sleep(3)
     else:
         return 0
     initialize(driver, test_url)
-    if XcloudScript.open_url(driver, test_url) == 1:
+    if Page_script.open_url(driver, test_url) == 1:
         time.sleep(3)
     else:
         return 0
-    if XcloudScript.login(driver, pw) == 1:
+    if Page_script.login(driver, pw) == 1:
         time.sleep(2)
     else:
         return 0
-    ssid = XcloudScript.get_5ssid(driver)
+    ssid = Page_script.get_5ssid(driver)
     if ssid == old_5ssid:
         logging.info('test success')
         return 1

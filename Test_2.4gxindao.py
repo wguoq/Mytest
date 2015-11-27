@@ -7,7 +7,7 @@ import logging
 import time
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
-import XcloudScript
+import Page_script
 import tools
 
 logging.basicConfig(level=logging.INFO,
@@ -40,9 +40,9 @@ def channel(driver, i):
 
 
 def dotest(driver):
-    XcloudScript.open_url(driver, test_url)
+    Page_script.open_url(driver, test_url)
     time.sleep(3)
-    XcloudScript.login(driver, pw)
+    Page_script.login(driver, pw)
     time.sleep(3)
     times = 1
     o = 0

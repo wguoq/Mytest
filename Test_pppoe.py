@@ -12,7 +12,7 @@
 import logging
 from selenium import webdriver
 import time
-import XcloudScript
+import Page_script
 import tools
 
 logging.basicConfig(level=logging.INFO,
@@ -31,24 +31,24 @@ logging.getLogger('').addHandler(console)
 
 
 def dotest(driver, url):
-    if XcloudScript.open_url(driver, url):
+    if Page_script.open_url(driver, url):
         time.sleep(3)
     else:
         return 0
-    if XcloudScript.login(driver, pw):
+    if Page_script.login(driver, pw):
         time.sleep(3)
     else:
         return 0
-    if XcloudScript.connect_pppoe(driver, pppoe_pst, pppoe_pwd):
+    if Page_script.connect_pppoe(driver, pppoe_pst, pppoe_pwd):
         time.sleep(3)
         if "断开" == driver.find_element_by_xpath("//span[@id='pppoe_btn']/a/b").text:
-            XcloudScript.disconnect_pppoe(driver)
+            Page_script.disconnect_pppoe(driver)
             return 1
         else:
-            XcloudScript.disconnect_pppoe(driver)
+            Page_script.disconnect_pppoe(driver)
             return 0
     else:
-        XcloudScript.disconnect_pppoe(driver)
+        Page_script.disconnect_pppoe(driver)
         return 0
 
 

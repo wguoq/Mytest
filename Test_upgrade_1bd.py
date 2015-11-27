@@ -16,7 +16,7 @@ import logging
 import paramiko
 from selenium import webdriver
 import time
-import XcloudScript
+import Page_script
 import tools
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
@@ -40,15 +40,15 @@ def dotest(driver, url):
     except Exception as e:
         logging.warning(e)
         return 0
-    if XcloudScript.open_url(driver, url) == 1:
+    if Page_script.open_url(driver, url) == 1:
         time.sleep(3)
     else:
         return 0
-    if XcloudScript.login(driver, pw) == 1:
+    if Page_script.login(driver, pw) == 1:
         time.sleep(3)
     else:
         return 0
-    if XcloudScript.upgrade(driver, new_build, wait) == 1:
+    if Page_script.upgrade(driver, new_build, wait) == 1:
         time.sleep(3)
     else:
         return 0
