@@ -22,11 +22,11 @@ logging.getLogger('').addHandler(console)
 #################################################################################################
 
 
-qq = "http://dldir1.qq.com/qqfile/qq/QQ7.8/16379/QQ7.8.exe"
+
 baidu = 'https://www.baidu.com/img/bd_logo1.png'
 baiqq = 'http://dlsw.baidu.com/sw-search-sp/soft/3a/12350/QQ_7.8.16379.0_setup.1446522220.exe'
 
-socket.setdefaulttimeout(300)
+socket.setdefaulttimeout(60)
 
 
 def report(blockCount, blockSize, totalSize):
@@ -55,7 +55,6 @@ def dotest(url, delay=60):
     #while True:
     print(time.ctime(time.time()))
     print('start download')
-    #print('delay = ', delay)
     data = download(url)
     if data.get('result') == 'success':
         size = round(data.get('size')/1024, 2)
@@ -71,6 +70,6 @@ while True:
 
 '''
 for i in range(1000):
-    ti = threading.Thread(target=dotest, args=(baidu, 30))
+    ti = threading.Thread(target=do_test, args=(baidu, 10))
     ti.start()
 '''

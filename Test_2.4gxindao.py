@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 #######################
 #   D1切换信道测试
+#   配置在testconfig.ini中
 #######################
 
 import logging
@@ -14,7 +15,7 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
                     filename='2.4xindao.log',
-                    filemode='w')
+                    filemode='a')
 #################################################################################################
 # 定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，并将其添加到当前的日志处理对象#
 console = logging.StreamHandler()
@@ -39,8 +40,8 @@ def channel(driver, i):
         return 0
 
 
-def dotest(driver):
-    Page_script.open_url(driver, test_url)
+def do_test(driver, url):
+    Page_script.open_url(driver, url)
     time.sleep(3)
     Page_script.login(driver, pw)
     time.sleep(3)
@@ -59,12 +60,12 @@ def dotest(driver):
                 times += 1
                 time.sleep(60)
 
-
-op = open('testconfig.ini', 'r')
-conf = tools.getconfig(op)
-op.close()
-test_ip = conf.get("reset_ip")
-test_url = 'http://'+test_ip
-pw = conf.get("pw")
-chrome = webdriver.Chrome()
-dotest(chrome)
+if __name__ == "__main__":
+    with open('testconfig.ini', 'r', encoding='utf-8') as f:
+        conf = tools.get_config(f)
+    for c in conf.items():
+        logging.info(c)
+    test_url = 'http://'+conf.get("default_ip")
+    pw = conf.get("admin_pw")
+    chrome = webdriver.Chrome()
+    do_test(chrome, test_url)

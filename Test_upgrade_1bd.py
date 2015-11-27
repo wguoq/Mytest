@@ -3,13 +3,7 @@
 ###################################
 #   升级测试（同一个版本升级）
 #   打开SSH
-#   在testconfig.ini中修改配置项:
-#   updatanum=测试次数
-#   upgrade_ip=路由器内网ip
-#   pw=登录密码
-#   new_build=新固件文件地址
-#   new_version=新固件版本
-#   wait_time2=升级等待时间
+#   配置在testconfig.ini中
 ###################################
 
 import logging
@@ -33,7 +27,7 @@ logging.getLogger('').addHandler(console)
 #################################################################################################
 
 
-def dotest(driver, url):
+def do_test(driver, url):
     try:
         ssh.connect(test_ip, 22, "root", pw)
         ssh.exec_command(cmd)
@@ -73,14 +67,14 @@ def dotest(driver, url):
 
 
 if __name__ == '__main__':
-    op = open('testconfig.ini', 'r')
-    conf = tools.getconfig(op)
-    op.close()
-    logging.info(conf)
-    num = int(conf.get("updatanum"))
+    with open('testconfig.ini', 'r', encoding='utf-8') as f:
+        conf = tools.get_config(f)
+    for c in conf.items():
+        logging.info(c)
+    num = int(conf.get("upgrade_times"))
     test_ip = conf.get("upgrade_ip")
     test_url = 'http://'+test_ip
-    pw = conf.get("pw")
+    pw = conf.get("admin_pw")
     new_build = conf.get("new_build")
     new_version = conf.get("new_version")
     wait = int(conf.get("wait_time2"))
@@ -97,7 +91,7 @@ if __name__ == '__main__':
         logging.info('====run test==== %s', i+1)
         chrome = webdriver.Chrome()
         if tools.ping_ok(test_ip):
-            if dotest(chrome, test_url) == 1:
+            if do_test(chrome, test_url) == 1:
                 chrome.quit()
             else:
                 fail += 1

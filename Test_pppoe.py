@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 ###################################
 #   拨号测试
-#   在testconfig.ini中修改配置项:
-#   pppoenum=测试次数
-#   pppoe_ip=路由器内网ip
-#   pw=登录密码
-#   pppoe_pst2=拨号账号
-#   pppoe_pwd=拨号密码
+#   配置在testconfig.ini中
 ###################################
 
 import logging
@@ -30,7 +25,7 @@ logging.getLogger('').addHandler(console)
 #################################################################################################
 
 
-def dotest(driver, url):
+def do_test(driver, url):
     if Page_script.open_url(driver, url):
         time.sleep(3)
     else:
@@ -39,7 +34,7 @@ def dotest(driver, url):
         time.sleep(3)
     else:
         return 0
-    if Page_script.connect_pppoe(driver, pppoe_pst, pppoe_pwd):
+    if Page_script.connect_pppoe(driver, pppoe_pst, pppoe_pwd) == 1:
         time.sleep(3)
         if "断开" == driver.find_element_by_xpath("//span[@id='pppoe_btn']/a/b").text:
             Page_script.disconnect_pppoe(driver)
@@ -53,20 +48,20 @@ def dotest(driver, url):
 
 
 if __name__ == '__main__':
-    op = open('testconfig.ini', 'r')
-    conf = tools.getconfig(op)
-    op.close()
-    logging.info(conf)
-    num = int(conf.get("pppoenum"))
+    with open('testconfig.ini', 'r', encoding='utf-8') as f:
+        conf = tools.get_config(f)
+    for c in conf.items():
+        logging.info(c)
+    num = int(conf.get("pppoe_times"))
     test_ip = conf.get("pppoe_ip")
     test_url = 'http://'+test_ip
-    pw = conf.get("pw")
-    pppoe_pst = conf.get("pppoe_pst2")
+    pw = conf.get("admin_pw")
+    pppoe_pst = conf.get("pppoe_user")
     pppoe_pwd = conf.get("pppoe_pwd")
     chrome = webdriver.Chrome()
     for i in range(num):
         logging.info('====run test==== %s', i)
-        if dotest(chrome, test_url):
+        if do_test(chrome, test_url) == 1:
             logging.info("connect success")
             time.sleep(3)
         else:

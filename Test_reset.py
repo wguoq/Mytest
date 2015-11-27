@@ -1,13 +1,7 @@
 # -*- coding:utf-8 -*-
 ###################################
-# D1恢复出厂测试
-#   测试时拔掉wan口网线
-#   在testconfig.ini中修改配置项:
-#   resetnum=测试次数
-#   reset_ip=路由器内网ip
-#   pw=登录密码
-#   old_5ssid=默认5gssid
-#   wait_time1=恢复出厂等待时间
+#   D1恢复出厂测试
+#   配置在testconfig.ini中
 ###################################
 
 import logging
@@ -79,7 +73,7 @@ def initialize(driver, url):
         return 0
 
 
-def dotest(driver, url):
+def do_test(driver, url):
     initialize(driver, url)
     if Page_script.open_url(driver, test_url) == 1:
         time.sleep(3)
@@ -118,23 +112,23 @@ def dotest(driver, url):
 
 
 if __name__ == '__main__':
-    op = open('testconfig.ini', 'r')
-    conf = tools.getconfig(op)
-    op.close()
-    logging.info(conf)
-    num = int(conf.get("resetnum"))
+    with open('testconfig.ini', 'r', encoding='utf-8') as f:
+        conf = tools.get_config(f)
+    for c in conf.items():
+        logging.info(c)
+    num = int(conf.get("reset_times"))
     test_ip = conf.get("reset_ip")
     test_url = 'http://' + test_ip
-    pw = conf.get("pw")
+    pw = conf.get("admin_pw")
     new_ssid = conf.get("new_ssid")
-    old_5ssid = conf.get("old_5ssid")
+    old_5ssid = conf.get("default_5ssid")
     wait_time = int(conf.get("wait_time1"))
     fail = 0
     for i in range(num):
         logging.info('====run test==== %s', i+1)
         chrome = webdriver.Chrome()
         if tools.ping_ok(test_ip) == 1:
-            if dotest(chrome, test_url) == 1:
+            if do_test(chrome, test_url) == 1:
                 chrome.quit()
             else:
                 fail += 1

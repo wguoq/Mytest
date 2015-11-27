@@ -10,10 +10,10 @@ for i in range(99):
     print(i)
     ip1 = '192.168.'+str(a)+'.1'
     url = 'http://'+ip1
-    print('111 '+ip1)
+    #print('111 '+ip1)
     #print('222 '+url)
     ip2 = '192.168.'+str(b)+'.1'
-    print('333 '+ip2)
+    #print('333 '+ip2)
     try:
         Page_script.open_url(chrome, url)
         time.sleep(2)

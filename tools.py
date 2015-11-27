@@ -15,7 +15,7 @@ def ping_ok(ip, n=3):
     return 0
 
 
-def getconfig(file):
+def get_config(file):
     line = file.readlines()
     dict2 = dict()
     for l in line:

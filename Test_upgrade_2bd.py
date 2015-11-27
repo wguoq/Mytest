@@ -1,17 +1,8 @@
 # -*- coding:utf-8 -*-
 
 ###################################
-#   升级测试(降级升级一起)
-#   打开SSH
-#   在testconfig.ini中修改配置项:
-#   updatanum=测试次数
-#   upgrade_ip=路由器内网ip
-#   pw=登录密码
-#   new_build=新固件文件地址
-#   new_version=新固件版本
-#   old_build=旧固件文件地址
-#   old_version=旧固件版本
-#   wait_time2=升级等待时间
+#   升级测试(降级/升级)
+#   配置在testconfig.ini中
 ###################################
 
 import logging
@@ -84,14 +75,14 @@ def dotest(driver, url):
 
 
 if __name__ == '__main__':
-    op = open('testconfig.ini', 'r')
-    conf = tools.getconfig(op)
-    op.close()
-    logging.info(conf)
-    num = int(conf.get("updatanum"))
+    with open('testconfig.ini', 'r', encoding='utf-8') as f:
+        conf = tools.get_config(f)
+    for c in conf.items():
+        logging.info(c)
+    num = int(conf.get("upgrade_times"))
     test_ip = conf.get("upgrade_ip")
     test_url = 'http://'+test_ip
-    pw = conf.get("pw")
+    pw = conf.get("admin_pw")
     old_build = conf.get("old_build")
     new_build = conf.get("new_build")
     new_version = conf.get("new_version")

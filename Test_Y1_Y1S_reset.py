@@ -1,13 +1,7 @@
 # -*- coding:utf-8 -*-
 ###################################
 #   Y1,Y1S恢复出厂测试
-#   测试时拔掉wan口网线
-#   在testconfig.ini中修改配置项:
-#   resetnum=测试次数
-#   reset_ip=路由器内网ip
-#   pw=登录密码
-#   old_24ssid=默认2.4gssid
-#   wait_time1=恢复出厂等待时间
+#  配置在testconfig.ini中
 ###################################
 
 import logging
@@ -93,13 +87,13 @@ def dotest(driver, url):
 
 if __name__ == '__main__':
     op = open('testconfig.ini', 'r')
-    conf = tools.getconfig(op)
+    conf = tools.get_config(op)
     op.close()
     logging.info(conf)
-    num = int(conf.get("resetnum"))
+    num = int(conf.get("reset_times"))
     test_ip = conf.get("reset_ip")
     test_url = 'http://'+test_ip
-    pw = conf.get("pw")
+    pw = conf.get("admin_pw")
     new_ssid = conf.get("new_ssid")
     old_24ssid = conf.get("old_24ssid")
     wait_time = int(conf.get("wait_time1"))
