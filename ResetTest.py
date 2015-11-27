@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
-
 ###################################
-#   D1恢复出厂测试
+# D1恢复出厂测试
 #   测试时拔掉wan口网线
 #   在testconfig.ini中修改配置项:
 #   resetnum=测试次数
@@ -32,6 +31,18 @@ logging.getLogger('').addHandler(console)
 #################################################################################################
 
 
+def detect_wan(driver):
+    flag = ['运营商', 'DHCP']
+    try:
+        tip = str(driver.find_element_by_css_selector("p.tips-text").text)
+        for a in flag:
+            if tip.find(a) > -1:
+                return a
+    except Exception as e:
+        print(e)
+        return 0
+
+
 def initialize(driver, url):
     try:
         time.sleep(3)
@@ -40,8 +51,19 @@ def initialize(driver, url):
         driver.find_element_by_id("init-protocol-checkbox").click()
         time.sleep(3)
         driver.find_element_by_id("initalize").click()
-        time.sleep(5)
-        driver.find_element_by_link_text(u"跳过检测").click()
+        time.sleep(30)
+        wan = detect_wan(driver)
+        if wan == 0:
+            print('wan = 0')
+            driver.find_element_by_link_text(u"跳过检测").click()
+        else:
+            if 'DHCP' == wan:
+                logging.info('wan= '+wan)
+                driver.find_element_by_link_text(u"下一步").click()
+                time.sleep(10)
+            if '运营商' == wan:
+                logging.info('wan= '+wan)
+                #TODO
         time.sleep(3)
         driver.find_element_by_id("key").clear()
         time.sleep(3)
@@ -94,6 +116,7 @@ def dotest(driver, url):
         logging.warning('oldssid= %s', old_5ssid)
         return 0
 
+
 if __name__ == '__main__':
     op = open('testconfig.ini', 'r')
     conf = tools.getconfig(op)
@@ -101,7 +124,7 @@ if __name__ == '__main__':
     logging.info(conf)
     num = int(conf.get("resetnum"))
     test_ip = conf.get("reset_ip")
-    test_url = 'http://'+test_ip
+    test_url = 'http://' + test_ip
     pw = conf.get("pw")
     new_ssid = conf.get("new_ssid")
     old_5ssid = conf.get("old_5ssid")
