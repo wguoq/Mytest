@@ -60,13 +60,15 @@ def dotest(url, delay=60):
         size = round(data.get('size')/1024, 2)
         t = round(data.get('time'), 2)
         speed = round(size/t, 2)
-        logging.info(data.get('localfile')+'\t'+str(size)+'KB'+'\t'+str(t)+'s'+'\t'+str(speed)+'KB/s')
+        logging.info(str(data.get('result'))+'\t'+str(size)+'KB'+'\t'+str(t)+'\t'+str(speed))
     else:
-        logging.warning(data.get('result'))
+        logging.warning(str(data.get('result'))+'\t'+'0'+'KB'+'\t'+'0'+'\t'+'0')
     time.sleep(delay)
 
+logging.info(' '+'\t'+'文件大小KB'+'\t'+'下载时间s'+'\t'+'平均下载速度KB/s')
 while True:
     dotest(baiqq, random.randint(60, 120))
+
 
 '''
 for i in range(1000):
