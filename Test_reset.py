@@ -75,7 +75,7 @@ def initialize(driver, url):
 
 def do_test(driver, url):
     initialize(driver, url)
-    if Page_script.open_url(driver, test_url) == 1:
+    if Page_script.open_url(driver, url) == 1:
         time.sleep(3)
     else:
         return 0
@@ -91,8 +91,8 @@ def do_test(driver, url):
         time.sleep(3)
     else:
         return 0
-    initialize(driver, test_url)
-    if Page_script.open_url(driver, test_url) == 1:
+    initialize(driver, url)
+    if Page_script.open_url(driver, url) == 1:
         time.sleep(3)
     else:
         return 0
