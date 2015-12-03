@@ -17,6 +17,53 @@ def open_url(driver, url):
         return 0
 
 
+def detect_wan(driver):
+    flag = ['运营商', 'DHCP']
+    try:
+        tip = str(driver.find_element_by_css_selector("p.tips-text").text)
+        for a in flag:
+            if tip.find(a) > -1:
+                return a
+    except Exception as e:
+        print(e)
+        return 0
+
+
+def initialize(driver, url, password):
+    try:
+        time.sleep(3)
+        driver.get(url)
+        time.sleep(3)
+        driver.find_element_by_id("init-protocol-checkbox").click()
+        time.sleep(3)
+        driver.find_element_by_id("initalize").click()
+        time.sleep(30)
+        wan = detect_wan(driver)
+        if wan == 0:
+            logging.info('wan = 跳过检测')
+            driver.find_element_by_link_text(u"跳过检测").click()
+        else:
+            if 'DHCP' == wan:
+                logging.info('wan = '+wan)
+                driver.find_element_by_link_text(u"下一步").click()
+                time.sleep(10)
+            if '运营商' == wan:
+                logging.info('wan = '+wan)
+                #TODO
+        time.sleep(3)
+        driver.find_element_by_id("key").clear()
+        time.sleep(3)
+        driver.find_element_by_id("key").send_keys(password)
+        time.sleep(3)
+        driver.find_element_by_id("wifi").click()
+        time.sleep(5)
+        driver.find_element_by_link_text(u"登录路由器").click()
+        return 1
+    except Exception as e:
+        logging.warning("===initialize=== %s", e)
+        return 0
+
+
 def login(driver, password):
     time.sleep(1)
     try:
@@ -28,7 +75,7 @@ def login(driver, password):
         if driver.find_element_by_css_selector("a.logo"):
             return 1
     except Exception as e:
-        logging.warning("===login=== %s", e)
+        logging.warning("===initialize=== %s", e)
         return 0
 
 
