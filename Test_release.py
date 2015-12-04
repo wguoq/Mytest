@@ -4,60 +4,48 @@ import Page_script
 import re
 
 
-def initialize():
-    print('111initialize')
+def initialize(driver, config):
+
+    Page_script.initialize()
+    print('D1_initialize')
 
 
-def login(driver, url, password):
-    print('222login')
-    Page_script.open_url(driver, url)
-    Page_script.login(driver, password)
+def login():
+    print('D1_login')
 
 
 def pppoe():
-    print('333pppoe')
+    print('D1_pppoe')
 
 
-Newifi = {'initialize': initialize,
-          'login': login,
-          'pppoe': pppoe}
-
+D1 = {'D1_initialize': initialize,
+      'D1_login': login,
+      'D1_pppoe': pppoe}
 
 
 def get_case(test_list):
-
-    for l in test_list:
-        if re.match('^\d\.', l):
-            print(l)
-
-def ck_lens(test_list):
-    if len(test_list) >= 1:
-        for l in test_ls:
-            if re.match('^\d\.', l):
-                return 1
-        print('没有有效行')
-        return 0
-    else:
-        print('列表长度为0')
-        return 0
+    a = list(filter(lambda x: re.match('^\d+\.', x), test_list))
+    b = list(map(lambda x: x.strip().split('.'), a))
+    c = sorted(b, key=(lambda x: x[0]))
+    return c
 
 
-def ck_format(test_list):
-    test = map(lambda x: x.strip().split('.'), test_list)
-    for i in test:
+def ck_format(test_case):
+    for i in test_case:
         if len(i) != 2:
-            print('格式错误', i)
+            print('有格式错误: ', '.'.join(i))
+            return 0
+    return 1
 
 
-def ck_oder(test_list):
-    i = len(test_list)-1
+def ck_oder(test_case):
+    i = len(test_case)-1
     while i >= 0:
-        ti = test_list[i]
-        del test_list[i]
-        tt = []+test_list
-        for t in tt:
-            if ti[0] == t[0]:
-                print('有序号重复：\n', ti, t)
+        a = test_case[i]
+        b = test_case[:i]
+        for c in b:
+            if a[0] == c[0]:
+                print('有序号重复：', '.'.join(a), '  ', '.'.join(c))
                 return 0
         i -= 1
     return 1
@@ -66,8 +54,16 @@ if __name__ == '__main__':
     # chrome = webdriver.Chrome()
     test_url = 'http://192.168.99.1'
     pw = '12345678'
-
     with open('Testlist.ini', 'r', encoding='utf-8') as f:
-        test_ls = f.readlines()
+        test_lst = f.readlines()
 
-    ck_format(test_ls)
+    ts_case = get_case(test_lst)
+    if ck_format(ts_case) & ck_oder(ts_case) == 1:
+        #print(ts_case)
+        for ts in ts_case:
+            print(ts[1])
+            if ts[1] in D1:
+                D1.get(ts[1])()
+    else:
+        print('22222')
+
