@@ -86,8 +86,8 @@ def dotest(driver, url):
         return 0
 
 if __name__ == '__main__':
-    op = open('testconfig.ini', 'r')
-    conf = tools.get_config(op)
+    op = open('testconfig.ini', 'r', encoding='utf-8')
+    conf = tools.get_config(op.readlines())
     op.close()
     logging.info(conf)
     num = int(conf.get("reset_times"))

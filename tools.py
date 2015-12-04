@@ -3,28 +3,23 @@ import time
 
 
 def ping_ok(ip, n=3):
-    # 调用系统的ping命令
     for i in range(n):
-        return1 = os.system('ping -n 1 -w 1 %s' % ip)
-        if return1:
+        re = os.system('ping -n 1 -w 1 %s' % ip)
+        if re:
             print('ping host fail ip = ', ip)
-            time.sleep(5)
+            time.sleep(1)
         else:
             print('ping ok')
             return 1
     return 0
 
 
-def get_config(file):
-    line = file.readlines()
-    dict2 = dict()
-    for l in line:
-        l = l.strip()
-        l = l.split("=")
-        if len(l) >= 2:
-            dict1 = {l[0]: l[1]}
-            dict2.update(dict1)
-    return dict2
+def get_config(lines):
+    d = {}
+    for i in list(map(lambda x: x.strip().split('='), lines)):
+        if len(i) == 2:
+            d.update({i[0]: i[1]})
+    return d
 
 
 def write_ser_log(log, file):

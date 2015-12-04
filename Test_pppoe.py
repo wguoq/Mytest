@@ -49,7 +49,7 @@ def do_test(driver, url):
 
 if __name__ == '__main__':
     with open('testconfig.ini', 'r', encoding='utf-8') as f:
-        conf = tools.get_config(f)
+        conf = tools.get_config(f.readlines())
     for c in conf.items():
         logging.info(c)
     num = int(conf.get("pppoe_times"))
