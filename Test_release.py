@@ -5,28 +5,35 @@ import re
 import tools
 
 
-def initialize(driver, config):
+def init(driver, url, config):
     print('D1_initialize')
-    url = 'http://'+config.get('default_ip')
-    password = config.get('admin_pw')
-    Page_script.initialize(driver, url, password)
-
-
-def login(driver, config):
-    print('D1_login')
-    url = 'http://'+config.get('default_ip')
     password = config.get('admin_pw')
     Page_script.open_url(driver, url)
-    Page_script.login(driver, password)
+    if Page_script.initialize(driver, url, password) == 1:
+        print('init success')
+    else:
+        print('init fail!!!')
+
+
+def login(driver, url, password):
+    print('D1_login')
+    Page_script.open_url(driver, url)
+    if Page_script.login(driver, password) == 1:
+        print('login success')
+    else:
+        print('login fail!!!')
 
 
 def pppoe(driver, config):
     print('D1_pppoe')
+    url = 'http://'+config.get('default_ip')
+    password = config.get('admin_pw')
+    user = conf.get('pppoe_user')
+    pw = conf.get('pppoe_pwd')
+    Page_script.open_url(driver, url)
+    Page_script.login(driver, password)
+    Page_script.connect_pppoe(driver, user, pw)
 
-
-D1 = {'D1_initialize': initialize,
-      'D1_login': login,
-      'D1_pppoe': pppoe}
 
 
 def get_case(test_list):
@@ -39,37 +46,49 @@ def get_case(test_list):
 def ck_format(test_case):
     for i in test_case:
         if len(i) != 2:
-            print('有格式错误: ', '.'.join(i))
+            print('格式错误: ', '.'.join(i))
             return 0
     return 1
 
 
 def ck_oder(test_case):
-    i = len(test_case)-1
+    i = len(test_case) - 1
     while i >= 0:
         a = test_case[i]
         b = test_case[:i]
         for c in b:
             if a[0] == c[0]:
-                print('有序号重复：', '.'.join(a), '  ', '.'.join(c))
+                print('序号重复：', '.'.join(a), '  ', '.'.join(c))
                 return 0
         i -= 1
     return 1
+
 
 if __name__ == '__main__':
     with open('testconfig.ini', 'r', encoding='utf-8') as f:
         conf = tools.get_config(f.readlines())
     with open('Testlist.ini', 'r', encoding='utf-8') as f:
         test_lst = f.readlines()
+    chrome = webdriver.Chrome()
+    admin_pw = conf.get('admin_pw')
+    default_url = 'http://'+conf.get('default_ip')
+
+    #{testname:(func,[params])} testname必须和配置文件里面一样
+    script = {'D1_initialize': (init, [chrome, default_url, conf]),
+              'D1_login': (login, [chrome, default_url, admin_pw]),
+              'D1_pppoe': (pppoe, [chrome, conf])}
 
     ts_case = get_case(test_lst)
-
     if ck_format(ts_case) & ck_oder(ts_case) == 1:
-        chrome = webdriver.Chrome()
-        for ts in ts_case:
-            if ts[1] in D1:
-                D1.get(ts[1])(chrome, conf)
+        build = []
+        for t in ts_case:
+            if t[1] in script:
+                build.append(script.get(t[1]))
+        for func, param in build:
+            func(*param)
         chrome.close()
     else:
         print('22222')
+
+
 
