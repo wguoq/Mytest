@@ -10,8 +10,7 @@ def open_url(driver, url):
     try:
         logging.info("try open " + url)
         driver.get(url)
-        if driver.find_element_by_id("focus_password"):
-            return 1
+        return 1
     except Exception as e:
         logging.warning("===open url=== %s", e)
         return 0
@@ -29,7 +28,7 @@ def detect_wan(driver):
         return 0
 
 
-def initialize(driver, url, password):
+def initialize(driver, url, password, usr='', pw=''):
     try:
         time.sleep(3)
         driver.get(url)
@@ -60,7 +59,7 @@ def initialize(driver, url, password):
         driver.find_element_by_link_text(u"登录路由器").click()
         return 1
     except Exception as e:
-        logging.warning("===initialize=== %s", e)
+        logging.warning("===init=== %s", e)
         return 0
 
 
@@ -75,7 +74,7 @@ def login(driver, password):
         if driver.find_element_by_css_selector("a.logo"):
             return 1
     except Exception as e:
-        logging.warning("===initialize=== %s", e)
+        logging.warning("===init=== %s", e)
         return 0
 
 
