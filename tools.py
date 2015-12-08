@@ -42,5 +42,5 @@ def uci_cmd(ssh_connection, cmd, flag):
         if l.split('=')[0] == flag:
             return l.split("=")[1]
         else:
-            return None
+            pass
     return None
