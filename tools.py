@@ -44,3 +44,7 @@ def uci_cmd(ssh_connection, cmd, flag):
         else:
             pass
     return None
+
+
+def find_flag(lines, flag):
+    return [l for l in lines if l.find(flag) > -1]
