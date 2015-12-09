@@ -36,14 +36,8 @@ def do_test(driver, url):
         return 0
     if Page_script.connect_pppoe(driver, pppoe_pst, pppoe_pwd) == 1:
         time.sleep(3)
-        if "断开" == driver.find_element_by_xpath("//span[@id='pppoe_btn']/a/b").text:
-            Page_script.disconnect_pppoe(driver)
-            return 1
-        else:
-            Page_script.disconnect_pppoe(driver)
-            return 0
+        return 1
     else:
-        Page_script.disconnect_pppoe(driver)
         return 0
 
 

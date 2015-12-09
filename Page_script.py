@@ -28,7 +28,7 @@ def detect_wan(driver):
         return 0
 
 
-def initialize(driver, url, password, usr='', pw=''):
+def initialize(driver, url, password, username='', pw=''):
     try:
         time.sleep(3)
         driver.get(url)
@@ -48,8 +48,14 @@ def initialize(driver, url, password, usr='', pw=''):
                 time.sleep(10)
             if '运营商' == wan:
                 logging.info('wan = '+wan)
-                #TODO
-        time.sleep(3)
+                driver.find_element_by_link_text(u"下一步").click()
+                time.sleep(3)
+                driver.find_element_by_id("username").clear()
+                driver.find_element_by_id("username").send_keys(username)
+                driver.find_element_by_id("password").clear()
+                driver.find_element_by_id("password").send_keys(pw)
+                driver.find_element_by_id("pppoe").click()
+                time.sleep(60)
         driver.find_element_by_id("key").clear()
         time.sleep(3)
         driver.find_element_by_id("key").send_keys(password)
@@ -236,9 +242,11 @@ def connect_pppoe(driver, pst, pwd):
         driver.find_element_by_css_selector("input.wify_long.pppoe_pst").send_keys(pst)
         driver.find_element_by_css_selector("input.wify_long.pppoe_pwd").clear()
         driver.find_element_by_css_selector("input.wify_long.pppoe_pwd").send_keys(pwd)
+        driver.find_element_by_xpath("//span[@id='pppoe_btn']/a/b").click()
+        time.sleep(5)
         driver.find_element_by_css_selector("a.dial > b").click()
         time.sleep(30)
-        if driver.find_element_by_xpath("//span[@id='pppoe_btn']/a/b"):
+        if driver.find_element_by_xpath("//span[@id='pppoe_btn']/a/b").text == u"断开":
             return 1
         else:
             return 0
@@ -252,9 +260,9 @@ def disconnect_pppoe(driver):
         logging.info("try disconnect pppoe...")
         driver.find_element_by_id("wifi").click()
         time.sleep(2)
-        driver.find_element_by_xpath("//span[@id='pppoe_btn']/a/b").click()
-        time.sleep(10)
-        if driver.find_element_by_css_selector("a.dial > b"):
+        driver.find_element_by_xpath("//span[@id='pppoe_btn']/a/b").clilk()
+        time.sleep(5)
+        if driver.find_element_by_css_selector("a.dial > b").text == u"拨号":
             return 1
         else:
             return 0
