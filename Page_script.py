@@ -261,3 +261,19 @@ def disconnect_pppoe(driver):
     except Exception as e:
         logging.warning(e)
         return 0
+
+
+def clone_cur_mac(driver):
+    try:
+        logging.info("try clone_cur_mac...")
+        driver.find_element_by_css_selector('#clonemac > span').click()
+        time.sleep(3)
+        cur_mac = driver.find_element_by_css_selector("span.clone_cur_mac").text
+        driver.find_element_by_link_text(u"克隆MAC地址").click()
+        time.sleep(1)
+        driver.find_element_by_css_selector("a.subbtn.macsave > b").click()
+        time.sleep(10)
+        return cur_mac
+    except Exception as e:
+        logging.warning(e)
+        return 0

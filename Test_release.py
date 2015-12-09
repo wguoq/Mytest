@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+import paramiko
 from selenium import webdriver
 import Page_script
 import re
@@ -32,8 +33,28 @@ def pppoe(driver, config):
     pw = conf.get('pppoe_pwd')
     Page_script.open_url(driver, url)
     Page_script.login(driver, password)
-    Page_script.connect_pppoe(driver, user, pw)
+    if Page_script.connect_pppoe(driver, user, pw) == 1:
+        print('pppoe connect success')
+    else:
+        print('pppoe connect fail!!!')
 
+
+def mac_clone(driver, url, password):
+    print('D1_mac_clone')
+    Page_script.open_url(driver, url)
+    Page_script.login(driver, password)
+    cur_mac = Page_script.clone_cur_mac(driver)
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect('192.168.99.1', port=22, username='root', password=password)
+    stdin, stdout, stderr = ssh.exec_command('ifconfig eth0.2')
+    a = tools.find_flag(stdout, 'HWaddr')
+    ssh.close()
+    HWaddr = str(a[0])
+    if cur_mac == HWaddr[HWaddr.find('HWaddr')+len('HWaddr'):].lower().strip():
+        print('mac clone success')
+    else:
+        print('mac clone fail!!!')
 
 
 def get_case(test_list):
