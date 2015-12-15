@@ -52,7 +52,7 @@ def do_test(driver, url):
         try:
             ssh.connect(test_ip, 22, "root", pw)
             this_version = tools.uci_cmd(ssh, uci_sys, ver_flag)
-            if new_version == this_version:
+            if new_version == this_version.strip():
                 logging.info("test success")
                 return 1
             else:
