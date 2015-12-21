@@ -1,8 +1,5 @@
 #testname：[D1_initialize，D1_login，D1_pppoe]
 #oder.testname
-#eg:
-#1.D1_initialize
-#2.D1_login
 
 
 3.D1_pppoe
