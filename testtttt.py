@@ -1,6 +1,6 @@
 from os.path import join
 from selenium import webdriver
-import Page_script
+import Script_page
 import unittest, time, re, os
 import configparser
 
@@ -40,11 +40,11 @@ def mk_xpath(x):
 f_path, f_names = walk_folder(drive_letter)
 driver = webdriver.Chrome()
 driver.get('http://192.168.99.1')
-Page_script.login(driver, '12345678')
+Script_page.login(driver, '12345678')
 time.sleep(3)
 first_xp = mk_xpath(first_folder)
 
-'''
+
 for path in f_path:
     path = path.split('\\')
     print(path)
@@ -61,7 +61,7 @@ for path in f_path:
         time.sleep(3)
     except Exception as e:
         print(e)
-'''
+
 for names in f_names:
     for name in names:
         if check_str(name, exclude.split(',')) == 1:
