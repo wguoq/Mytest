@@ -13,7 +13,7 @@ def open_url(driver, url):
         time.sleep(5)
         return 1
     except Exception as e:
-        logging.warning("===open url=== %s", e)
+        logging.warning("===open url error=== %s", e)
         return 0
 
 
@@ -66,7 +66,7 @@ def initialize(driver, url, password, username='', pw=''):
         driver.find_element_by_link_text(u"登录路由器").click()
         return 1
     except Exception as e:
-        logging.warning("===init=== %s", e)
+        logging.warning("===init error=== %s", e)
         return 0
 
 
@@ -105,7 +105,7 @@ def initialize_y1(driver, url, password, username='', pw=''):
         driver.find_element_by_link_text(u"登录路由器").click()
         return 1
     except Exception as e:
-        logging.warning("===init=== %s", e)
+        logging.warning("===init error=== %s", e)
         return 0
 
 
@@ -120,7 +120,7 @@ def login(driver, password):
         if driver.find_element_by_css_selector("a.logo"):
             return 1
     except Exception as e:
-        logging.warning("===init=== %s", e)
+        logging.warning("===login error=== %s", e)
         return 0
 
 
@@ -137,7 +137,7 @@ def login_y1(driver, password):
         if driver.find_element_by_css_selector("a.logo"):
             return 1
     except Exception as e:
-        logging.warning("===login=== %s", e)
+        logging.warning("===login error=== %s", e)
         return 1
 
 
@@ -157,7 +157,7 @@ def set_5ssid(driver, value):
         time.sleep(3)
         return 1
     except Exception as e:
-        logging.warning("===set 5G ssid=== %s ", e)
+        logging.warning("===set 5G ssid error=== %s ", e)
         return 0
 
 
@@ -177,7 +177,7 @@ def set_24ssid(driver, value):
         time.sleep(3)
         return 1
     except Exception as e:
-        logging.warning("===set 5G ssid=== %s ", e)
+        logging.warning("===set 2.4G ssid error=== %s ", e)
         return 0
 
 
@@ -189,7 +189,7 @@ def get_5ssid(driver):
         time.sleep(5)
         return driver.find_element_by_css_selector("input.netssid.setwireturn_input").get_attribute("value")
     except Exception as e:
-        logging.warning("===get ssid=== %s", e)
+        logging.warning("===get 5Gssid error=== %s", e)
         return None
 
 
@@ -201,7 +201,7 @@ def get_24ssid(driver):
         time.sleep(5)
         return driver.find_element_by_css_selector("input.netssid.setwireturn_input").get_attribute("value")
     except Exception as e:
-        logging.warning("===get ssid=== %s", e)
+        logging.warning("===get 2.4gGssid error=== %s", e)
         return None
 
 
@@ -222,7 +222,7 @@ def reset(driver, wait_time):
         time.sleep(wait_time)
         return 1
     except Exception as e:
-        logging.warning("===reset=== %s", e)
+        logging.warning("===reset error=== %s", e)
         return 0
 
 
@@ -241,7 +241,7 @@ def restart(driver, wait_time):
         time.sleep(wait_time)
         return 1
     except Exception as e:
-        logging.warning("===restart=== %s", e)
+        logging.warning("===restart error=== %s", e)
         return 0
 
 
@@ -258,7 +258,7 @@ def upgrade(driver, build, wait_time):
         time.sleep(wait_time)
         return 1
     except Exception as e:
-        logging.warning("===upgrade=== %s", e)
+        logging.warning("===upgrade error=== %s", e)
         return 0
 
 
@@ -277,7 +277,7 @@ def upgrade_reset(driver, build, wait_time):
         time.sleep(wait_time)
         return 1
     except Exception as e:
-        logging.warning("===upgrade=== %s", e)
+        logging.warning("===upgrade error=== %s", e)
         return 0
 
 
@@ -310,7 +310,7 @@ def connect_pppoe(driver, pst, pwd):
         else:
             return 0
     except Exception as e:
-        logging.warning(e)
+        logging.warning('=== connect pppoe error=== %s', e)
         return 0
 
 
@@ -342,5 +342,5 @@ def clone_cur_mac(driver):
         time.sleep(10)
         return cur_mac
     except Exception as e:
-        logging.warning(e)
+        logging.warning('===clone mac error=== %s', e)
         return 0
