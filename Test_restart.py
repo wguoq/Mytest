@@ -9,7 +9,6 @@ import logging
 from selenium import webdriver
 import time
 import Page_script
-import tools
 import urllib.request
 
 logging.basicConfig(level=logging.INFO,

@@ -5,10 +5,8 @@
 ###################################
 import configparser
 import logging
-import time
 from selenium import webdriver
 import Page_script
-import tools
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
