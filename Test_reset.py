@@ -29,14 +29,15 @@ def do_test(driver, config_file):
     config = configparser.ConfigParser()
     config.read(config_file, encoding='UTF-8')
     reset_times = config.get('Reset', 'reset_times')
-    default_ip = config.get('Reset', 'default_ip')
-    default_pw = config.get('Reset', 'default_pw')
+    default_ip = config.get('Default', 'default_ip')
+    default_pw = config.get('Default', 'default_pw')
     new_ssid = config.get('Reset', 'new_ssid')
     default_5ssid = config.get('Reset', 'default_5ssid')
     pppoe_user = config.get('PPPOE', 'pppoe_user')
     pppoe_pwd = config.get('PPPOE', 'pppoe_pwd')
     reset_wtime = config.get('Reset', 'reset_wtime')
     for i in range(int(reset_times)):
+        logging.info('===run test=== %s', i+1)
         fail = 0
         Page_script.initialize(driver, 'http://'+default_ip, default_pw, username=pppoe_user, pw=pppoe_pwd)
         if Page_script.open_url(driver, 'http://'+default_ip) == 1:
