@@ -10,7 +10,7 @@ import random
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s %(levelname)s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='qq.log',
+                    filename='download.log',
                     filemode='a')
 #################################################################################################
 # 定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，并将其添加到当前的日志处理对象#
@@ -25,7 +25,7 @@ logging.getLogger('').addHandler(console)
 
 baidu = 'https://www.baidu.com/img/bd_logo1.png'
 baiqq = 'http://dlsw.baidu.com/sw-search-sp/soft/3a/12350/QQ_7.8.16379.0_setup.1446522220.exe'
-
+local = 'http://192.168.11.2/111'
 socket.setdefaulttimeout(60)
 
 
@@ -65,9 +65,10 @@ def dotest(url, delay=60):
         logging.warning(str(data.get('result'))+'\t'+'0'+'KB'+'\t'+'0'+'\t'+'0')
     time.sleep(delay)
 
+
 logging.info(' '+'\t'+'文件大小KB'+'\t'+'下载时间s'+'\t'+'平均下载速度KB/s')
 while True:
-    dotest(baiqq, random.randint(60, 120))
+    dotest(local, random.randint(5, 30))
 
 
 '''

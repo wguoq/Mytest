@@ -28,24 +28,17 @@ logging.getLogger('').addHandler(console)
 def do_test(driver, config_file):
     config = configparser.ConfigParser()
     config.read(config_file, encoding='UTF-8')
-    pppoe_times = config.get('PPPOE', 'pppoe_times')
+    pppoe_times = int(config.get('PPPOE', 'pppoe_times'))
     pppoe_user = config.get('PPPOE', 'pppoe_user')
     pppoe_pwd = config.get('PPPOE', 'pppoe_pwd')
     url = 'http://'+config.get('PPPOE', 'pppoe_ip')
     pppoe_pw = config.get('PPPOE', 'pppoe_pw')
     fail = 0
-    if Page_script.open_url(driver, url):
-        time.sleep(3)
-    else:
-        return 0
-    if Page_script.login(driver, pppoe_pw):
-        time.sleep(3)
-    else:
-        return 0
+    Page_script.open_url(driver, url)
+    Page_script.login(driver, pppoe_pw)
     for i in range(int(pppoe_times)):
         logging.info('===run test=== %s', i+1)
         if Page_script.connect_pppoe(driver, pppoe_user, pppoe_pwd) == 1:
-            time.sleep(3)
             logging.info("connect success")
         else:
             fail += 1

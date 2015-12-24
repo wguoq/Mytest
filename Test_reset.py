@@ -41,37 +41,55 @@ def do_test(driver, config_file):
         if Page_script.open_url(driver, 'http://'+default_ip) == 1:
             pass
         else:
+            fail += 1
+            logging.warning("===test fail===")
+            logging.info("fail times ======== %s", fail)
             continue
         if Page_script.login(driver, default_pw) == 1:
             pass
         else:
+            fail += 1
+            logging.warning("===test fail===")
+            logging.info("fail times ======== %s", fail)
             continue
         if Page_script.set_5ssid(driver, new_ssid) == 1:
             pass
         else:
+            fail += 1
+            logging.warning("===test fail===")
+            logging.info("fail times ======== %s", fail)
             continue
         if Page_script.reset(driver, reset_wtime) == 1:
             pass
         else:
+            fail += 1
+            logging.warning("===test fail===")
+            logging.info("fail times ======== %s", fail)
             continue
         Page_script.initialize(driver, 'http://'+default_ip, default_pw, username=pppoe_user, pw=pppoe_pwd)
         if Page_script.open_url(driver, 'http://'+default_ip) == 1:
             pass
         else:
+            fail += 1
+            logging.warning("===test fail===")
+            logging.info("fail times ======== %s", fail)
             continue
         if Page_script.login(driver, default_pw) == 1:
             pass
         else:
+            fail += 1
+            logging.warning("===test fail===")
+            logging.info("fail times ======== %s", fail)
             continue
         ssid5 = Page_script.get_5ssid(driver)
         if ssid5 == default_5ssid:
             logging.info('test success')
         else:
-            logging.warning("===test fail===")
             fail += 1
+            logging.warning("===test fail===")
             logging.info("fail times ======== %s", fail)
-            logging.warning('ssid= %s', ssid5)
-            logging.warning('oldssid= %s', default_5ssid)
+            logging.warning('5Gssid= %s', ssid5)
+            logging.warning('default_5ssid= %s', default_5ssid)
             continue
 
 if __name__ == '__main__':
