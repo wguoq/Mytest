@@ -31,13 +31,10 @@ def do_test(driver, config_file):
     config = configparser.ConfigParser()
     config.read(config_file, encoding='UTF-8')
     restart_times = config.get('Restart', 'restart_times')
-    default_ip = config.get('Reset', 'default_ip')
-    default_pw = config.get('Reset', 'default_pw')
-    new_ssid = config.get('Reset', 'new_ssid')
-    default_5ssid = config.get('Reset', 'default_5ssid')
-    pppoe_user = config.get('PPPOE', 'pppoe_user')
-    pppoe_pwd = config.get('PPPOE', 'pppoe_pwd')
-    reset_wtime = config.get('Reset', 'reset_wtime')
+    restart_ip = config.get('Restart', 'restart_ip')
+    restart_pw = config.get('Restart', 'restart_pw')
+    restart_wtime = config.get('Reset', 'restart_wtime')
+
 
 
     if Page_script.open_url(driver, url) == 1:
