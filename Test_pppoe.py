@@ -43,13 +43,13 @@ def do_test(driver, config_file):
     else:
         return 0
     for i in range(int(pppoe_times)):
-        logging.info('====run test==== %s', i+1)
+        logging.info('===run test=== %s', i+1)
         if Page_script.connect_pppoe(driver, pppoe_user, pppoe_pwd) == 1:
             time.sleep(3)
             logging.info("connect success")
         else:
             fail += 1
-            logging.warning("connect fail")
+            logging.warning("===connect fail===")
             logging.info("fail times ======== %s", fail)
 
 

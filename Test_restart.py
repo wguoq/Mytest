@@ -30,70 +30,51 @@ logging.getLogger('').addHandler(console)
 def do_test(driver, config_file):
     config = configparser.ConfigParser()
     config.read(config_file, encoding='UTF-8')
-    restart_times = config.get('Restart', 'restart_times')
+    restart_times = int(config.get('Restart', 'restart_times'))
     restart_ip = config.get('Restart', 'restart_ip')
     restart_pw = config.get('Restart', 'restart_pw')
-    restart_wtime = config.get('Reset', 'restart_wtime')
-
-
-
-    if Page_script.open_url(driver, url) == 1:
-        time.sleep(3)
-    else:
-        return 0
-    if Page_script.login(driver, pw) == 1:
-        time.sleep(3)
-    else:
-        return 0
-    if Page_script.restart(driver, wait_time) == 1:
-        time.sleep(3)
-    else:
-        return 0
-    if Page_script.open_url(driver, url) == 1:
-        time.sleep(3)
-    else:
-        return 0
-    if Page_script.login(driver, pw) == 1:
-        return 1
-    else:
-        return 0
-
-
-if __name__ == '__main__':
-    with open('testconfig.ini', 'r', encoding='utf-8') as f:
-        conf = tools.get_config(f.readlines())
-    for c in conf.items():
-        logging.info(c)
-    num = int(conf.get("restart_times"))
-    test_ip = conf.get("restart_ip")
-    test_url = 'http://'+test_ip
-    pw = conf.get("admin_pw")
-    wait_time = int(conf.get("wait_time1"))
-    fail = 0
-    baidu = 'https://www.baidu.com'
-    qq = 'http://www.qq.com/'
-    for i in range(num):
-        logging.info('====run test==== %s', i+1)
-        chrome = webdriver.Chrome()
-        if do_test(chrome, test_url) == 1:
-            chrome.quit()
+    restart_wtime = int(config.get('Restart', 'restart_wtime'))
+    for i in range(restart_times):
+        logging.info('===run test=== %s', i+1)
+        fail = 0
+        if Page_script.open_url(driver, 'http://'+restart_ip) == 1:
+            pass
+        else:
+            continue
+        if Page_script.login(driver, restart_pw) == 1:
+            pass
+        else:
+            continue
+        if Page_script.restart(driver, restart_wtime) == 1:
+            pass
+        else:
+            continue
+        if Page_script.open_url(driver, 'http://'+restart_ip) == 1:
+            pass
+        else:
+            continue
+        if Page_script.login(driver, restart_pw) == 1:
             try:
                 print('request baidu')
-                urllib.request.urlretrieve(baidu)
+                urllib.request.urlretrieve('https://www.baidu.com')
                 time.sleep(1)
                 print('request qq')
-                urllib.request.urlretrieve(qq)
+                urllib.request.urlretrieve('http://www.qq.com/')
                 time.sleep(1)
                 logging.info('test success')
             except Exception as e:
-                logging.warning(e)
-                logging.warning('====request '+baidu+' fail====')
                 fail += 1
+                logging.info('===test fail===')
                 logging.info("fail times ======== %s", fail)
-                time.sleep(1)
         else:
             fail += 1
-            logging.info('====test fail====')
+            logging.info('===test fail===')
             logging.info("fail times ======== %s", fail)
-            chrome.quit()
+    driver.quit()
+
+
+if __name__ == '__main__':
+    chrome = webdriver.Chrome()
+    do_test(chrome, 'testconfig.ini')
+
 
