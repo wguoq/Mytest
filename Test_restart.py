@@ -4,7 +4,7 @@
 #   重启测试
 #   配置在testconfig.ini中
 ###################################
-
+import configparser
 import logging
 from selenium import webdriver
 import time
@@ -27,7 +27,19 @@ logging.getLogger('').addHandler(console)
 #################################################################################################
 
 
-def do_test(driver, url):
+def do_test(driver, config_file):
+    config = configparser.ConfigParser()
+    config.read(config_file, encoding='UTF-8')
+    restart_times = config.get('Restart', 'restart_times')
+    default_ip = config.get('Reset', 'default_ip')
+    default_pw = config.get('Reset', 'default_pw')
+    new_ssid = config.get('Reset', 'new_ssid')
+    default_5ssid = config.get('Reset', 'default_5ssid')
+    pppoe_user = config.get('PPPOE', 'pppoe_user')
+    pppoe_pwd = config.get('PPPOE', 'pppoe_pwd')
+    reset_wtime = config.get('Reset', 'reset_wtime')
+
+
     if Page_script.open_url(driver, url) == 1:
         time.sleep(3)
     else:
@@ -51,7 +63,7 @@ def do_test(driver, url):
 
 
 if __name__ == '__main__':
-    with open('TestConfig.ini', 'r', encoding='utf-8') as f:
+    with open('testconfig.ini', 'r', encoding='utf-8') as f:
         conf = tools.get_config(f.readlines())
     for c in conf.items():
         logging.info(c)

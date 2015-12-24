@@ -3,7 +3,7 @@
 #   拨号测试
 #   配置在testconfig.ini中
 ###################################
-
+import configparser
 import logging
 from selenium import webdriver
 import time
@@ -25,39 +25,35 @@ logging.getLogger('').addHandler(console)
 #################################################################################################
 
 
-def do_test(driver, url):
+def do_test(driver, config_file):
+    config = configparser.ConfigParser()
+    config.read(config_file, encoding='UTF-8')
+    pppoe_times = config.get('PPPOE', 'pppoe_times')
+    pppoe_user = config.get('PPPOE', 'pppoe_user')
+    pppoe_pwd = config.get('PPPOE', 'pppoe_pwd')
+    url = 'http://'+config.get('PPPOE', 'pppoe_ip')
+    pppoe_pw = config.get('PPPOE', 'pppoe_pw')
+    fail = 0
     if Page_script.open_url(driver, url):
         time.sleep(3)
     else:
         return 0
-    if Page_script.login(driver, pw):
+    if Page_script.login(driver, pppoe_pw):
         time.sleep(3)
     else:
         return 0
-    if Page_script.connect_pppoe(driver, pppoe_pst, pppoe_pwd) == 1:
-        time.sleep(3)
-        return 1
-    else:
-        return 0
+    for i in range(int(pppoe_times)):
+        logging.info('====run test==== %s', i+1)
+        if Page_script.connect_pppoe(driver, pppoe_user, pppoe_pwd) == 1:
+            time.sleep(3)
+            logging.info("connect success")
+        else:
+            fail += 1
+            logging.warning("connect fail")
+            logging.info("fail times ======== %s", fail)
 
 
 if __name__ == '__main__':
-    with open('TestConfig.ini', 'r', encoding='utf-8') as f:
-        conf = tools.get_config(f.readlines())
-    for c in conf.items():
-        logging.info(c)
-    num = int(conf.get("pppoe_times"))
-    test_ip = conf.get("pppoe_ip")
-    test_url = 'http://'+test_ip
-    pw = conf.get("admin_pw")
-    pppoe_pst = conf.get("pppoe_user")
-    pppoe_pwd = conf.get("pppoe_pwd")
     chrome = webdriver.Chrome()
-    for i in range(num):
-        logging.info('====run test==== %s', i)
-        if do_test(chrome, test_url) == 1:
-            logging.info("connect success")
-            time.sleep(3)
-        else:
-            logging.warning("connect fail")
+    do_test(chrome, 'testconfig.ini')
     chrome.quit()

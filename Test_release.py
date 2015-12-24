@@ -97,7 +97,7 @@ def ck_oder(test_case):
 
 if __name__ == '__main__':
     chrome = webdriver.Chrome()
-    with open('TestConfig.ini', 'r', encoding='utf-8') as f:
+    with open('testconfig.ini', 'r', encoding='utf-8') as f:
         conf = tools.get_config(f.readlines())
         admin_pw = conf.get('admin_pw')
         default_url = 'http://'+conf.get('default_ip')

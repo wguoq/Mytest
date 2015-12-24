@@ -10,6 +10,7 @@ def open_url(driver, url):
     try:
         logging.info("try open " + url)
         driver.get(url)
+        time.sleep(5)
         return 1
     except Exception as e:
         logging.warning("===open url=== %s", e)
@@ -43,11 +44,50 @@ def initialize(driver, url, password, username='', pw=''):
             driver.find_element_by_link_text(u"跳过检测").click()
         else:
             if 'DHCP' == wan:
-                logging.info('wan = '+wan)
+                logging.info('wan = ' + wan)
                 driver.find_element_by_link_text(u"下一步").click()
                 time.sleep(10)
             if '运营商' == wan:
-                logging.info('wan = '+wan)
+                logging.info('wan = ' + wan)
+                driver.find_element_by_link_text(u"下一步").click()
+                time.sleep(3)
+                driver.find_element_by_id("username").clear()
+                driver.find_element_by_id("username").send_keys(username)
+                driver.find_element_by_id("password").clear()
+                driver.find_element_by_id("password").send_keys(pw)
+                driver.find_element_by_id("pppoe").click()
+                time.sleep(60)
+        driver.find_element_by_id("key").clear()
+        time.sleep(3)
+        driver.find_element_by_id("key").send_keys(password)
+        time.sleep(3)
+        driver.find_element_by_id("wifi").click()
+        time.sleep(5)
+        driver.find_element_by_link_text(u"登录路由器").click()
+        return 1
+    except Exception as e:
+        logging.warning("===init=== %s", e)
+        return 0
+
+
+def initialize_y1(driver, url, password, username='', pw=''):
+    try:
+        time.sleep(3)
+        driver.get(url)
+        time.sleep(3)
+        driver.find_element_by_id("initalize").click()
+        time.sleep(30)
+        wan = detect_wan(driver)
+        if wan == 0:
+            logging.info('wan = 跳过检测')
+            driver.find_element_by_link_text(u"跳过检测").click()
+        else:
+            if 'DHCP' == wan:
+                logging.info('wan = ' + wan)
+                driver.find_element_by_link_text(u"下一步").click()
+                time.sleep(10)
+            if '运营商' == wan:
+                logging.info('wan = ' + wan)
                 driver.find_element_by_link_text(u"下一步").click()
                 time.sleep(3)
                 driver.find_element_by_id("username").clear()
@@ -222,10 +262,29 @@ def upgrade(driver, build, wait_time):
         return 0
 
 
+def upgrade_reset(driver, build, wait_time):
+    try:
+        logging.info("try upgrade to " + build)
+        driver.find_element_by_link_text(u"固件升级").click()
+        time.sleep(5)
+        driver.find_element_by_id("firmware_file").send_keys(build)
+        time.sleep(5)
+        driver.find_element_by_name("firmwaresave").click()
+        time.sleep(5)
+        driver.find_element_by_class_name("firmwarebtn").click()
+        time.sleep(10)
+        logging.info('now upgrading wait %s', wait_time)
+        time.sleep(wait_time)
+        return 1
+    except Exception as e:
+        logging.warning("===upgrade=== %s", e)
+        return 0
+
+
 def get_version(driver):
     try:
         logging.info("try get version...")
-        return driver.find_element_by_xpath("//div[@id='left_nav']/div[2]/div[2]/p[2]/span[2]").text
+        return driver.find_element_by_css_selector("span.number").text
     except Exception as e:
         logging.warning("===get version=== %s", e)
         return None

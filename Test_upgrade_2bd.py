@@ -75,7 +75,7 @@ def dotest(driver, url):
 
 
 if __name__ == '__main__':
-    with open('TestConfig.ini', 'r', encoding='utf-8') as f:
+    with open('testconfig.ini', 'r', encoding='utf-8') as f:
         conf = tools.get_config(f.readlines())
     for c in conf.items():
         logging.info(c)
