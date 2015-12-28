@@ -3,7 +3,7 @@ import os
 import time
 from os.path import join
 from selenium import webdriver
-import Page_script
+import script_page
 
 
 def check_str(string, ex_lst):
@@ -45,8 +45,8 @@ def file_view_folders(driver, config_file):
     first_xp = mk_xpath(config.get('Samba', 'first_folder'))
     exclude = (config.get('Samba', 'exclude')).split(',')
     paths = get_folders(drive_letter, exclude)
-    Page_script.open_url(driver, 'http://' + samba_ip)
-    Page_script.login(driver, samba_pw)
+    script_page.open_url(driver, 'http://' + samba_ip)
+    script_page.login(driver, samba_pw)
 
     for path in paths:
         print(path)
@@ -78,8 +78,8 @@ def file_view_files(driver, config_file):
     first_xp = mk_xpath(config.get('Samba', 'first_folder'))
     exclude = (config.get('Samba', 'exclude')).split(',')
     f_names = get_flies(drive_letter)
-    Page_script.open_url(driver, 'http://' + samba_ip)
-    Page_script.login(driver, samba_pw)
+    script_page.open_url(driver, 'http://' + samba_ip)
+    script_page.login(driver, samba_pw)
 
     for names in f_names:
         for name in names:

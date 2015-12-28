@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-import Page_script
+import script_page
 from selenium import webdriver
 import time
 
@@ -15,9 +15,9 @@ for i in range(99):
     ip2 = '192.168.'+str(b)+'.1'
     #print('333 '+ip2)
     try:
-        Page_script.open_url(chrome, url)
+        script_page.open_url(chrome, url)
         time.sleep(2)
-        Page_script.login(chrome, "12345678")
+        script_page.login(chrome, "12345678")
         time.sleep(2)
         chrome.find_element_by_id("lan").click()
         time.sleep(10)

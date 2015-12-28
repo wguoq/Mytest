@@ -7,7 +7,7 @@ import configparser
 import logging
 from selenium import webdriver
 import time
-import Page_script
+import script_page
 import tools
 
 logging.basicConfig(level=logging.INFO,
@@ -34,11 +34,11 @@ def do_test(driver, config_file):
     url = 'http://'+config.get('PPPOE', 'pppoe_ip')
     pppoe_pw = config.get('PPPOE', 'pppoe_pw')
     fail = 0
-    Page_script.open_url(driver, url)
-    Page_script.login(driver, pppoe_pw)
+    script_page.open_url(driver, url)
+    script_page.login(driver, pppoe_pw)
     for i in range(int(pppoe_times)):
         logging.info('===run test=== %s', i+1)
-        if Page_script.connect_pppoe(driver, pppoe_user, pppoe_pwd) == 1:
+        if script_page.connect_pppoe(driver, pppoe_user, pppoe_pwd) == 1:
             logging.info("connect success")
         else:
             fail += 1

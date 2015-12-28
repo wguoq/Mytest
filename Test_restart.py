@@ -8,7 +8,7 @@ import configparser
 import logging
 from selenium import webdriver
 import time
-import Page_script
+import script_page
 import urllib.request
 
 logging.basicConfig(level=logging.INFO,
@@ -36,35 +36,35 @@ def do_test(driver, config_file):
     for i in range(restart_times):
         logging.info('===run test=== %s', i+1)
         fail = 0
-        if Page_script.open_url(driver, 'http://'+restart_ip) == 1:
+        if script_page.open_url(driver, 'http://'+restart_ip) == 1:
             pass
         else:
             fail += 1
             logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
             continue
-        if Page_script.login(driver, restart_pw) == 1:
+        if script_page.login(driver, restart_pw) == 1:
             pass
         else:
             fail += 1
             logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
             continue
-        if Page_script.restart(driver, restart_wtime) == 1:
+        if script_page.restart(driver, restart_wtime) == 1:
             pass
         else:
             fail += 1
             logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
             continue
-        if Page_script.open_url(driver, 'http://'+restart_ip) == 1:
+        if script_page.open_url(driver, 'http://'+restart_ip) == 1:
             pass
         else:
             fail += 1
             logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
             continue
-        if Page_script.login(driver, restart_pw) == 1:
+        if script_page.login(driver, restart_pw) == 1:
             try:
                 print('request baidu')
                 urllib.request.urlretrieve('https://www.baidu.com')

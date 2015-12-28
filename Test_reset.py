@@ -6,7 +6,7 @@
 import configparser
 import logging
 from selenium import webdriver
-import Page_script
+import script_page
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
@@ -37,51 +37,51 @@ def do_test(driver, config_file):
     for i in range(reset_times):
         logging.info('===run test=== %s', i+1)
         fail = 0
-        Page_script.initialize(driver, 'http://'+default_ip, default_pw, username=pppoe_user, pw=pppoe_pwd)
-        if Page_script.open_url(driver, 'http://'+default_ip) == 1:
+        script_page.initialize(driver, 'http://' + default_ip, default_pw, username=pppoe_user, pw=pppoe_pwd)
+        if script_page.open_url(driver, 'http://'+default_ip) == 1:
             pass
         else:
             fail += 1
             logging.warning("===test fail===")
             logging.info("fail times ======== %s", fail)
             continue
-        if Page_script.login(driver, default_pw) == 1:
+        if script_page.login(driver, default_pw) == 1:
             pass
         else:
             fail += 1
             logging.warning("===test fail===")
             logging.info("fail times ======== %s", fail)
             continue
-        if Page_script.set_5ssid(driver, new_ssid) == 1:
+        if script_page.set_5ssid(driver, new_ssid) == 1:
             pass
         else:
             fail += 1
             logging.warning("===test fail===")
             logging.info("fail times ======== %s", fail)
             continue
-        if Page_script.reset(driver, reset_wtime) == 1:
+        if script_page.reset(driver, reset_wtime) == 1:
             pass
         else:
             fail += 1
             logging.warning("===test fail===")
             logging.info("fail times ======== %s", fail)
             continue
-        Page_script.initialize(driver, 'http://'+default_ip, default_pw, username=pppoe_user, pw=pppoe_pwd)
-        if Page_script.open_url(driver, 'http://'+default_ip) == 1:
+        script_page.initialize(driver, 'http://' + default_ip, default_pw, username=pppoe_user, pw=pppoe_pwd)
+        if script_page.open_url(driver, 'http://'+default_ip) == 1:
             pass
         else:
             fail += 1
             logging.warning("===test fail===")
             logging.info("fail times ======== %s", fail)
             continue
-        if Page_script.login(driver, default_pw) == 1:
+        if script_page.login(driver, default_pw) == 1:
             pass
         else:
             fail += 1
             logging.warning("===test fail===")
             logging.info("fail times ======== %s", fail)
             continue
-        ssid5 = Page_script.get_5ssid(driver)
+        ssid5 = script_page.get_5ssid(driver)
         if ssid5 == default_5ssid:
             logging.info('test success')
         else:

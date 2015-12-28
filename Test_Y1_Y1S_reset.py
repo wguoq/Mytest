@@ -7,7 +7,7 @@
 import logging
 import time
 from selenium import webdriver
-import Page_script
+import script_page
 import tools
 
 logging.basicConfig(level=logging.INFO,
@@ -50,32 +50,32 @@ def initialize(driver, url):
 
 def dotest(driver, url):
     initialize(driver, url)
-    if Page_script.open_url(driver, url) == 1:
+    if script_page.open_url(driver, url) == 1:
         time.sleep(3)
     else:
         return 0
-    if Page_script.login_y1(driver, pw) == 1:
+    if script_page.login_y1(driver, pw) == 1:
         time.sleep(3)
     else:
         return 0
-    if Page_script.set_24ssid(driver, new_ssid) == 1:
+    if script_page.set_24ssid(driver, new_ssid) == 1:
         time.sleep(3)
     else:
         return 0
-    if Page_script.reset(driver, wait_time) == 1:
+    if script_page.reset(driver, wait_time) == 1:
         time.sleep(3)
     else:
         return 0
     initialize(driver, url)
-    if Page_script.open_url(driver, url) == 1:
+    if script_page.open_url(driver, url) == 1:
         time.sleep(3)
     else:
         return 0
-    if Page_script.login_y1(driver, pw):
+    if script_page.login_y1(driver, pw):
         time.sleep(2)
     else:
         return 0
-    ssid = Page_script.get_24ssid(driver)
+    ssid = script_page.get_24ssid(driver)
     if ssid == old_24ssid:
         logging.info('test success')
         return 1

@@ -9,7 +9,7 @@ import logging
 import paramiko
 from selenium import webdriver
 import time
-import Page_script
+import script_page
 import tools
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
@@ -40,21 +40,21 @@ def do_test(driver, config_file):
     for i in range(upgrade_times):
         logging.info('===run test=== %s', i+1)
         #降级
-        if Page_script.open_url(driver, 'http://'+upgrade_ip) == 1:
+        if script_page.open_url(driver, 'http://'+upgrade_ip) == 1:
             pass
         else:
             fail += 1
             logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
             continue
-        if Page_script.login(driver, upgrade_pw) == 1:
+        if script_page.login(driver, upgrade_pw) == 1:
             pass
         else:
             fail += 1
             logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
             continue
-        if Page_script.upgrade(driver, old_build, upgrade_wtime) == 1:
+        if script_page.upgrade(driver, old_build, upgrade_wtime) == 1:
             pass
         else:
             fail += 1
@@ -62,21 +62,21 @@ def do_test(driver, config_file):
             logging.info("fail times ======== %s", fail)
             continue
         #升级
-        if Page_script.open_url(driver, 'http://'+upgrade_ip) == 1:
+        if script_page.open_url(driver, 'http://'+upgrade_ip) == 1:
             pass
         else:
             fail += 1
             logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
             continue
-        if Page_script.login(driver, upgrade_pw) == 1:
+        if script_page.login(driver, upgrade_pw) == 1:
             pass
         else:
             fail += 1
             logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
             continue
-        if Page_script.upgrade(driver, new_build, upgrade_wtime) == 1:
+        if script_page.upgrade(driver, new_build, upgrade_wtime) == 1:
             pass
         else:
             fail += 1
@@ -84,21 +84,21 @@ def do_test(driver, config_file):
             logging.info("fail times ======== %s", fail)
             continue
         #检查升级是否成功
-        if Page_script.open_url(driver, 'http://'+upgrade_ip) == 1:
+        if script_page.open_url(driver, 'http://'+upgrade_ip) == 1:
             pass
         else:
             fail += 1
             logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
             continue
-        if Page_script.login(driver, upgrade_pw) == 1:
+        if script_page.login(driver, upgrade_pw) == 1:
             pass
         else:
             fail += 1
             logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
             continue
-        version = Page_script.get_version(driver)
+        version = script_page.get_version(driver)
         if 'V'+new_version == version.strip():
             logging.info("test success")
         else:

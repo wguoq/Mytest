@@ -8,7 +8,7 @@ import logging
 import time
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
-import Page_script
+import script_page
 import tools
 import configparser
 
@@ -46,9 +46,9 @@ def do_test(driver, config_file):
     config.read(config_file, encoding='UTF-8')
     url = 'http://'+config.get('Default', 'default_ip')
     default_pw = config.get('Default', 'default_pw')
-    Page_script.open_url(driver, url)
+    script_page.open_url(driver, url)
     time.sleep(3)
-    Page_script.login(driver, default_pw)
+    script_page.login(driver, default_pw)
     time.sleep(3)
     times = 1
     o = 0
