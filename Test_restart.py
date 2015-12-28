@@ -40,28 +40,28 @@ def do_test(driver, config_file):
             pass
         else:
             fail += 1
-            logging.info('===test fail===')
+            logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
             continue
         if Page_script.login(driver, restart_pw) == 1:
             pass
         else:
             fail += 1
-            logging.info('===test fail===')
+            logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
             continue
         if Page_script.restart(driver, restart_wtime) == 1:
             pass
         else:
             fail += 1
-            logging.info('===test fail===')
+            logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
             continue
         if Page_script.open_url(driver, 'http://'+restart_ip) == 1:
             pass
         else:
             fail += 1
-            logging.info('===test fail===')
+            logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
             continue
         if Page_script.login(driver, restart_pw) == 1:
@@ -74,12 +74,13 @@ def do_test(driver, config_file):
                 time.sleep(1)
                 logging.info('test success')
             except Exception as e:
+                print(e)
                 fail += 1
-                logging.info('===test fail===')
+                logging.warning('===test fail===')
                 logging.info("fail times ======== %s", fail)
         else:
             fail += 1
-            logging.info('===test fail===')
+            logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
     driver.quit()
 

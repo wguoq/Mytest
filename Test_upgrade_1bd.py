@@ -2,7 +2,6 @@
 
 ###################################
 #   升级测试（同一个版本升级）
-#   打开SSH
 #   配置在testconfig.ini中
 ###################################
 import configparser
@@ -36,66 +35,58 @@ def do_test(driver, config_file):
     new_build = config.get('Upgrade', 'new_build')
     new_version = config.get('Upgrade', 'new_version')
     upgrade_wtime = int(config.get('Upgrade', 'upgrade_wtime'))
+    fail = 0
     for i in range(upgrade_times):
         logging.info('===run test=== %s', i+1)
         if Page_script.open_url(driver, 'http://'+upgrade_ip) == 1:
             pass
         else:
+            fail += 1
+            logging.warning('===test fail===')
+            logging.info("fail times ======== %s", fail)
             continue
         if Page_script.login(driver, upgrade_pw) == 1:
             pass
         else:
+            fail += 1
+            logging.warning('===test fail===')
+            logging.info("fail times ======== %s", fail)
             continue
         if Page_script.upgrade(driver, new_build, upgrade_wtime) == 1:
             pass
         else:
+            fail += 1
+            logging.warning('===test fail===')
+            logging.info("fail times ======== %s", fail)
             continue
         #检查升级是否成功
         if Page_script.open_url(driver, 'http://'+upgrade_ip) == 1:
             pass
         else:
+            fail += 1
+            logging.warning('===test fail===')
+            logging.info("fail times ======== %s", fail)
             continue
         if Page_script.login(driver, upgrade_pw) == 1:
             pass
         else:
+            fail += 1
+            logging.warning('===test fail===')
+            logging.info("fail times ======== %s", fail)
             continue
-        if new_version == this_version.strip():
+        version = Page_script.get_version(driver)
+        if 'V'+new_version == version.strip():
             logging.info("test success")
-
         else:
+            fail += 1
+            logging.warning('===test fail===')
+            logging.info("fail times ======== %s", fail)
             logging.info("new_version = " + new_version)
-            logging.info("this_version = " + this_version)
-
-
-
+            logging.info("version = " + version)
 
 
 if __name__ == '__main__':
-    '''
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    version = '0.0.0.1'
-    cmd1 = 'sed -i "s/DISTRIB_RELEASE=.*/DISTRIB_RELEASE=\\"'
-    cmd2 = '\\"/g" /etc/openwrt_release'
-    cmd = cmd1+version+cmd2
-    uci_sys = 'uci show system'
-    ver_flag = 'system.@system[0].ver'
-    '''
-    fail = 0
-    for i in range(num):
-        logging.info('====run test==== %s', i+1)
-        chrome = webdriver.Chrome()
-        if tools.ping_ok(test_ip):
-            if do_test(chrome, test_url) == 1:
-                chrome.quit()
-            else:
-                fail += 1
-                logging.info("fail times ======== %s", fail)
-                chrome.quit()
-        else:
-            logging.info("===ping host fail===")
-            fail += 1
-            logging.info("fail times ======== %s", fail)
-            chrome.quit()
-            time.sleep(10)
+    chrome = webdriver.Chrome()
+    do_test(chrome, 'testconfig.ini')
+
 
