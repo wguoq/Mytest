@@ -2,8 +2,7 @@
 import re
 from selenium import webdriver
 import tools
-
-
+import script_release
 
 
 def get_case(test_list):
@@ -44,10 +43,10 @@ if __name__ == '__main__':
         ts_case = get_case(f.readlines())
         print(ts_case)
 
-    script = {'D1_initialize': (init, [chrome, default_url, conf]),
-              'D1_login': (login, [chrome, default_url, admin_pw]),
-              'D1_pppoe': (pppoe, [chrome, default_url, conf]),
-              'D1_mac_clone': (mac_clone, [chrome, default_url, admin_pw])}
+    script = {'D1_initialize': (script_release.init, [chrome, default_url, conf]),
+              'D1_login': (script_release.login, [chrome, default_url, admin_pw]),
+              'D1_pppoe': (script_release.pppoe, [chrome, default_url, conf]),
+              'D1_mac_clone': (script_release.mac_clone, [chrome, default_url, admin_pw])}
 
     if ck_format(ts_case) & ck_oder(ts_case) == 1:
         test = []
