@@ -46,5 +46,71 @@ def do_test(driver, config_file):
             fail += 1
             logging.warning('===test fail===')
             logging.info("fail times ======== %s", fail)
-            chrome.quit()
-            time.sleep(10)
+            continue
+        if Page_script.login(driver, upgrade_pw) == 1:
+            pass
+        else:
+            fail += 1
+            logging.warning('===test fail===')
+            logging.info("fail times ======== %s", fail)
+            continue
+        if Page_script.upgrade(driver, old_build, upgrade_wtime) == 1:
+            pass
+        else:
+            fail += 1
+            logging.warning('===test fail===')
+            logging.info("fail times ======== %s", fail)
+            continue
+        #升级
+        if Page_script.open_url(driver, 'http://'+upgrade_ip) == 1:
+            pass
+        else:
+            fail += 1
+            logging.warning('===test fail===')
+            logging.info("fail times ======== %s", fail)
+            continue
+        if Page_script.login(driver, upgrade_pw) == 1:
+            pass
+        else:
+            fail += 1
+            logging.warning('===test fail===')
+            logging.info("fail times ======== %s", fail)
+            continue
+        if Page_script.upgrade(driver, new_build, upgrade_wtime) == 1:
+            pass
+        else:
+            fail += 1
+            logging.warning('===test fail===')
+            logging.info("fail times ======== %s", fail)
+            continue
+        #检查升级是否成功
+        if Page_script.open_url(driver, 'http://'+upgrade_ip) == 1:
+            pass
+        else:
+            fail += 1
+            logging.warning('===test fail===')
+            logging.info("fail times ======== %s", fail)
+            continue
+        if Page_script.login(driver, upgrade_pw) == 1:
+            pass
+        else:
+            fail += 1
+            logging.warning('===test fail===')
+            logging.info("fail times ======== %s", fail)
+            continue
+        version = Page_script.get_version(driver)
+        if 'V'+new_version == version.strip():
+            logging.info("test success")
+        else:
+            fail += 1
+            logging.warning('===test fail===')
+            logging.info("fail times ======== %s", fail)
+            logging.info("new_version = " + new_version)
+            logging.info("version = " + version)
+
+
+if __name__ == '__main__':
+    chrome = webdriver.Chrome()
+    do_test(chrome, 'testconfig.ini')
+
+
