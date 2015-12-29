@@ -29,7 +29,7 @@ def detect_wan(driver):
         return 0
 
 
-def initialize(driver, url, password, username='', pw=''):
+def initialize(driver, url, password, pppoe_user='', pppoe_pwd=''):
     try:
         time.sleep(3)
         driver.get(url)

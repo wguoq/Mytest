@@ -36,14 +36,12 @@ def mk_xpath(x):
     return '//a[contains(text(),"{name}")]'.format(name=x)
 
 
-def file_view_folders(driver, config_file):
-    config = configparser.ConfigParser()
-    config.read(config_file, encoding='UTF-8')
-    samba_ip = config.get('Samba', 'samba_ip')
-    samba_pw = config.get('Samba', 'samba_pw')
-    drive_letter = config.get('Samba', 'drive_letter')
-    first_xp = mk_xpath(config.get('Samba', 'first_folder'))
-    exclude = (config.get('Samba', 'exclude')).split(',')
+def file_view_folders(driver, configparser):
+    samba_ip = configparser.get('Samba', 'samba_ip')
+    samba_pw = configparser.get('Samba', 'samba_pw')
+    drive_letter = configparser.get('Samba', 'drive_letter')
+    first_xp = mk_xpath(configparser.get('Samba', 'first_folder'))
+    exclude = (configparser.get('Samba', 'exclude')).split(',')
     paths = get_folders(drive_letter, exclude)
     script_page.open_url(driver, 'http://' + samba_ip)
     script_page.login(driver, samba_pw)
@@ -69,14 +67,12 @@ def file_view_folders(driver, config_file):
     driver.quit()
 
 
-def file_view_files(driver, config_file):
-    config = configparser.ConfigParser()
-    config.read(config_file, encoding='UTF-8')
-    samba_ip = config.get('Samba', 'samba_ip')
-    samba_pw = config.get('Samba', 'samba_pw')
-    drive_letter = config.get('Samba', 'drive_letter')
-    first_xp = mk_xpath(config.get('Samba', 'first_folder'))
-    exclude = (config.get('Samba', 'exclude')).split(',')
+def file_view_files(driver, configparser):
+    samba_ip = configparser.get('Samba', 'samba_ip')
+    samba_pw = configparser.get('Samba', 'samba_pw')
+    drive_letter = configparser.get('Samba', 'drive_letter')
+    first_xp = mk_xpath(configparser.get('Samba', 'first_folder'))
+    exclude = (configparser.get('Samba', 'exclude')).split(',')
     f_names = get_flies(drive_letter)
     script_page.open_url(driver, 'http://' + samba_ip)
     script_page.login(driver, samba_pw)
@@ -110,5 +106,7 @@ def file_view_files(driver, config_file):
 
 if __name__ == '__main__':
     chrome = webdriver.Chrome()
-    file_view_folders(chrome, 'testconfig.ini')
-    file_view_files(chrome, 'testconfig.ini')
+    config = configparser.ConfigParser()
+    config.read('testconfig.ini', encoding='UTF-8')
+    file_view_folders(chrome, config)
+    file_view_files(chrome, config)

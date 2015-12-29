@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+import configparser
 import re
 from selenium import webdriver
 import tools
@@ -35,18 +36,16 @@ def ck_oder(test_case):
 
 if __name__ == '__main__':
     chrome = webdriver.Chrome()
-    with open('testconfig.ini', 'r', encoding='utf-8') as f:
-        conf = tools.get_config(f.readlines())
-        admin_pw = conf.get('admin_pw')
-        default_url = 'http://'+conf.get('default_ip')
-    with open('testlist.txt', 'r', encoding='utf-8') as f:
+    config = configparser.ConfigParser()
+    config.read('testconfig.ini', encoding='UTF-8')
+    with open('testcase.txt', 'r', encoding='utf-8') as f:
         ts_case = get_case(f.readlines())
         print(ts_case)
 
-    script = {'D1_initialize': (script_release.init, [chrome, default_url, conf]),
-              'D1_login': (script_release.login, [chrome, default_url, admin_pw]),
-              'D1_pppoe': (script_release.pppoe, [chrome, default_url, conf]),
-              'D1_mac_clone': (script_release.mac_clone, [chrome, default_url, admin_pw])}
+    script = {'D1_initialize': (script_release.init, [chrome, config]),
+              'D1_login': (script_release.login, [chrome, config]),
+              'D1_pppoe': (script_release.pppoe, [chrome, config]),
+              'D1_mac_clone': (script_release.mac_clone, [chrome, config])}
 
     if ck_format(ts_case) & ck_oder(ts_case) == 1:
         test = []
