@@ -23,7 +23,7 @@ def get_config(lines):
 
 
 def write_ser_log(log, file):
-    if None != log:
+    if log is not None:
         log = log.replace("\\r", "")
         log = log.replace("\\n", "")
         log = log.replace("b'", "")

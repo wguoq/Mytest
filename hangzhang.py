@@ -58,5 +58,5 @@ def do_test(cmd, delay):
         hz.flush()
     hz.close()
 
-do_test(ip_rate, 10)
+do_test(ip_rate, 60)
 

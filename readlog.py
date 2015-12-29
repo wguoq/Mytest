@@ -6,17 +6,17 @@ import csv
 def find_flag(lines, flag):
     return [l for l in lines if l.find(flag) > -1]
 
-
-f = open('123.txt', 'r')
-log = f.readlines()
-f.close()
-flags = ['p2pguard', 'p2pclient', 'p2pdownload']
-for i in flags:
-    f = open(i+'.txt', 'w')
-    for k in find_flag(log, i):
-        k = k.strip()
-        f.write(re.sub('\s+', '\t', k)+'\n')
+if __name__ == '__main__':
+    f = open('123.txt', 'r')
+    log = f.readlines()
     f.close()
+    flags = ['p2pguard', 'p2pclient', 'p2pdownload']
+    for i in flags:
+        f = open(i+'.txt', 'w')
+        for k in find_flag(log, i):
+            k = k.strip()
+            f.write(re.sub('\s+', '\t', k)+'\n')
+        f.close()
 
 
 '''

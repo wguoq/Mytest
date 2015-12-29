@@ -24,7 +24,7 @@ def open_web(urlist, delay):
 op = open("URLlist", "r")
 url_lst = op.readlines()
 op.close()
-for i in range(5):
+for i in range(3):
     ti = threading.Thread(target=open_web, args=(url_lst, 120,))
     time.sleep(10)
     ti.start()

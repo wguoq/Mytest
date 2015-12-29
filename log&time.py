@@ -52,7 +52,7 @@ if __name__ == '__main__':
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     cmd = 'ps'
     lock = threading.RLock()
-    a = threading.Thread(target=write_time, args=(logfile, 1800))
+    a = threading.Thread(target=write_time, args=(logfile, 3600))
     b = threading.Thread(target=write_serlog, args=(logfile,))
     c = threading.Thread(target=write_sshlog, args=(ssh, cmd, ssh_log))
     threads = [a, b, c]

@@ -68,7 +68,7 @@ def dotest(url, delay=60):
 
 logging.info(' '+'\t'+'文件大小KB'+'\t'+'下载时间s'+'\t'+'平均下载速度KB/s')
 while True:
-    dotest(local, random.randint(5, 30))
+    dotest(local, random.randint(5, 10))
 
 
 '''
