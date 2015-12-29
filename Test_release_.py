@@ -1,6 +1,8 @@
 # -*- coding:utf-8 -*-
 import configparser
 import re
+
+import time
 from selenium import webdriver
 import tools
 import script_release
@@ -45,7 +47,8 @@ if __name__ == '__main__':
     script = {'D1_initialize': (script_release.init, [chrome, config]),
               'D1_login': (script_release.login, [chrome, config]),
               'D1_pppoe': (script_release.pppoe, [chrome, config]),
-              'D1_mac_clone': (script_release.mac_clone, [chrome, config])}
+              'D1_mac_clone': (script_release.mac_clone, [chrome, config]),
+              'D1_file_view': (script_release.file_view, [chrome, config])}
 
     if ck_format(ts_case) & ck_oder(ts_case) == 1:
         test = []
@@ -54,6 +57,7 @@ if __name__ == '__main__':
                 test.append(script.get(t[1]))
         for func, param in test:
             func(*param)
+            time.sleep(60)
     else:
         print('22222')
     chrome.close()

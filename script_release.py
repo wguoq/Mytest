@@ -72,4 +72,4 @@ def mac_clone(driver, configparser):
 
 def file_view(driver, configparser):
     Test_file_view.file_view_folders(driver, configparser)
-    Test_file_view.file_view_files()
+    Test_file_view.file_view_files(driver, configparser)
