@@ -53,6 +53,16 @@ def mac_clone(driver, configparser):
     script_page.open_url(driver, 'http://'+default_ip)
     script_page.login(driver, default_pw)
     cur_mac = script_page.clone_cur_mac(driver)
+    script_page.open_url(driver, 'http://'+default_ip)
+    script_page.login(driver, default_pw)
+    driver.find_element_by_css_selector('#clonemac > span').click()
+    time.sleep(3)
+    new_mac = driver.find_element_by_css_selector("input.clone_cur_inputmac").get_attribute("value")
+    if cur_mac == new_mac:
+        print('mac clone success')
+    else:
+        print('mac clone fail!!!')
+    '''
     a = ['a']
     try:
         ssh = paramiko.SSHClient()
@@ -68,6 +78,7 @@ def mac_clone(driver, configparser):
         print('mac clone success')
     else:
         print('mac clone fail!!!')
+    '''
 
 
 def file_view(driver, configparser):

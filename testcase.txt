@@ -1,10 +1,10 @@
 #testname：[D1_initialize，D1_login，D1_pppoe, D1_mac_clone, D1_file_view]
 #oder.testname
 
-1.D1_initialize
-2.D1_login
+#1.D1_initialize
+#2.D1_login
 #3.D1_pppoe
 4.D1_mac_clone
-5.D1_file_view
+#5.D1_file_view
 
 

@@ -60,5 +60,5 @@ if __name__ == '__main__':
             time.sleep(60)
     else:
         print('22222')
-    chrome.close()
+    chrome.quit()
 

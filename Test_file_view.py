@@ -64,7 +64,7 @@ def file_view_folders(driver, configparser):
         except Exception as e:
             print('can not find: ', path)
             print(e)
-    driver.quit()
+
 
 
 def file_view_files(driver, configparser):
@@ -101,7 +101,6 @@ def file_view_files(driver, configparser):
                 except Exception as e:
                     print('can not find: ', name)
                     print(e)
-    driver.quit()
 
 
 if __name__ == '__main__':
@@ -110,3 +109,4 @@ if __name__ == '__main__':
     config.read('testconfig.ini', encoding='UTF-8')
     file_view_folders(chrome, config)
     file_view_files(chrome, config)
+    chrome.quit()
