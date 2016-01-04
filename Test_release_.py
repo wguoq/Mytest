@@ -40,7 +40,7 @@ if __name__ == '__main__':
     chrome = webdriver.Chrome()
     config = configparser.ConfigParser()
     config.read('testconfig.ini', encoding='UTF-8')
-    with open('testcase.txt', 'r', encoding='utf-8') as f:
+    with open('testlist.txt', 'r', encoding='utf-8') as f:
         ts_case = get_case(f.readlines())
         print(ts_case)
 
@@ -55,10 +55,10 @@ if __name__ == '__main__':
         for t in ts_case:
             if t[1] in script:
                 test.append(script.get(t[1]))
+            else:
+                print(t[1], ' is not in script')
         for func, param in test:
             func(*param)
             time.sleep(60)
-    else:
-        print('22222')
     chrome.quit()
 

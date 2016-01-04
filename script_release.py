@@ -7,7 +7,6 @@ import Test_file_view
 
 def init(driver, configparser):
     print('D1_initialize')
-    time.sleep(5)
     default_ip = configparser.get('Default', 'default_ip')
     default_pw = configparser.get('Default', 'default_pw')
     pppoe_user = configparser.get('PPPOE', 'pppoe_user')
@@ -20,7 +19,6 @@ def init(driver, configparser):
 
 def login(driver, configparser):
     print('D1_login')
-    time.sleep(5)
     default_ip = configparser.get('Default', 'default_ip')
     default_pw = configparser.get('Default', 'default_pw')
     script_page.open_url(driver, 'http://'+default_ip)
@@ -32,7 +30,6 @@ def login(driver, configparser):
 
 def pppoe(driver, configparser):
     print('D1_pppoe')
-    time.sleep(5)
     pppoe_ip = configparser.get('PPPOE', 'pppoe_ip')
     pppoe_pw = configparser.get('PPPOE', 'pppoe_pw')
     pppoe_user = configparser.get('Default', 'pppoe_user')
@@ -47,7 +44,6 @@ def pppoe(driver, configparser):
 
 def mac_clone(driver, configparser):
     print('D1_mac_clone')
-    time.sleep(5)
     default_ip = configparser.get('Default', 'default_ip')
     default_pw = configparser.get('Default', 'default_pw')
     script_page.open_url(driver, 'http://'+default_ip)
@@ -56,14 +52,15 @@ def mac_clone(driver, configparser):
     script_page.open_url(driver, 'http://'+default_ip)
     script_page.login(driver, default_pw)
     driver.find_element_by_css_selector('#clonemac > span').click()
-    time.sleep(3)
+    time.sleep(5)
     new_mac = driver.find_element_by_css_selector("input.clone_cur_inputmac").get_attribute("value")
     if cur_mac == new_mac:
         print('mac clone success')
     else:
         print('mac clone fail!!!')
-    '''
-    a = ['a']
+
+'''
+    a = []
     try:
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -78,7 +75,7 @@ def mac_clone(driver, configparser):
         print('mac clone success')
     else:
         print('mac clone fail!!!')
-    '''
+'''
 
 
 def file_view(driver, configparser):
