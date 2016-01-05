@@ -2,9 +2,9 @@
 #oder.testname
 
 #1.D1_initialize
-2.D1_login
+#2.D1_login
 #3.D1_pppoe
-4.D1_mac_clone
-5.D1_file_view
-
+#4.D1_mac_clone
+#5.D1_file_view
+6.D1_SSID
 

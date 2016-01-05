@@ -81,3 +81,45 @@ def mac_clone(driver, configparser):
 def file_view(driver, configparser):
     Test_file_view.file_view_folders(driver, configparser)
     Test_file_view.file_view_files(driver, configparser)
+
+
+def SSID(driver, configparser):
+    print('2.4ssid')
+    test_ip = configparser.get('Release', 'test_ip')
+    test_pw = configparser.get('Release', 'test_pw')
+    ssid24 = (configparser.get('Release', 'ssid24')).split(',')
+    ssid5 = (configparser.get('Release', 'ssid5')).split(',')
+    id24 = 'wifinfo_24'
+    id5 = 'wifinfo_5'
+
+    def aaa(css_id, ssid):
+        print(ssid)
+        script_page.open_url(driver, 'http://'+test_ip)
+        script_page.login(driver, test_pw)
+        driver.find_element_by_id(css_id).click()
+        time.sleep(5)
+        driver.find_element_by_css_selector("input.netssid.setwireturn_input").clear()
+        time.sleep(1)
+        driver.find_element_by_css_selector("input.netssid.setwireturn_input").send_keys(ssid)
+        time.sleep(1)
+        driver.find_element_by_css_selector("a.subbtn.saveStatus > b").click()
+        time.sleep(16)
+        driver.find_element_by_css_selector("a.setup_return").click()
+        time.sleep(3)
+        script_page.open_url(driver, 'http://'+test_ip)
+        script_page.login(driver, test_pw)
+        driver.find_element_by_id(css_id).click()
+        time.sleep(5)
+        a = driver.find_element_by_css_selector("input.netssid.setwireturn_input").get_attribute("value")
+        if ssid == a:
+            print('1111')
+        else:
+            print('2222')
+            print(a)
+            print(ssid)
+    for ss in ssid24:
+        aaa(id24, ss)
+    for ss in ssid5:
+        aaa(id5, ss)
+
+

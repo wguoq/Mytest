@@ -37,7 +37,7 @@ def do_test(driver, config_file):
     for i in range(reset_times):
         logging.info('===run test=== %s', i+1)
         fail = 0
-        script_page.initialize(driver, 'http://' + default_ip, default_pw, username=pppoe_user, pw=pppoe_pwd)
+        script_page.initialize(driver, 'http://' + default_ip, default_pw, pppoe_user, pppoe_pwd)
         if script_page.open_url(driver, 'http://'+default_ip) == 1:
             pass
         else:
