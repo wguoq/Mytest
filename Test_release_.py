@@ -50,7 +50,8 @@ if __name__ == '__main__':
               'D1_pppoe': (script_release.pppoe, [chrome, config]),
               'D1_mac_clone': (script_release.mac_clone, [chrome, config]),
               'D1_file_view': (script_release.file_view, [chrome, config]),
-              'D1_SSID': (script_release.SSID, [chrome, config])}
+              'D1_SSID': (script_release.set_ssid, [chrome, config])}
+
     if ck_format(ts_case) & ck_oder(ts_case) == 1:
         test = []
         for t in ts_case:

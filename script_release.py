@@ -6,7 +6,7 @@ import Test_file_view
 
 
 def init(driver, configparser):
-    print('D1_initialize')
+    print('D1_initialize 支持不差网线，DHCP,拨号，完成配置进入首页算成功')
     default_ip = configparser.get('Default', 'default_ip')
     default_pw = configparser.get('Default', 'default_pw')
     pppoe_user = configparser.get('PPPOE', 'pppoe_user')
@@ -18,7 +18,7 @@ def init(driver, configparser):
 
 
 def login(driver, configparser):
-    print('D1_login')
+    print('D1_login 输入密码，进入首页就算成功')
     default_ip = configparser.get('Default', 'default_ip')
     default_pw = configparser.get('Default', 'default_pw')
     script_page.open_url(driver, 'http://'+default_ip)
@@ -29,7 +29,7 @@ def login(driver, configparser):
 
 
 def pppoe(driver, configparser):
-    print('D1_pppoe')
+    print('D1_pppoe 输入账号密码拨号，页面返回连接成功就算成功，不验证是否上网')
     pppoe_ip = configparser.get('PPPOE', 'pppoe_ip')
     pppoe_pw = configparser.get('PPPOE', 'pppoe_pw')
     pppoe_user = configparser.get('Default', 'pppoe_user')
@@ -43,7 +43,7 @@ def pppoe(driver, configparser):
 
 
 def mac_clone(driver, configparser):
-    print('D1_mac_clone')
+    print('D1_mac_clone ')
     default_ip = configparser.get('Default', 'default_ip')
     default_pw = configparser.get('Default', 'default_pw')
     script_page.open_url(driver, 'http://'+default_ip)
@@ -83,7 +83,7 @@ def file_view(driver, configparser):
     Test_file_view.file_view_files(driver, configparser)
 
 
-def SSID(driver, configparser):
+def set_ssid(driver, configparser):
     print('2.4ssid')
     test_ip = configparser.get('Release', 'test_ip')
     test_pw = configparser.get('Release', 'test_pw')
@@ -96,21 +96,22 @@ def SSID(driver, configparser):
         print(ssid)
         script_page.open_url(driver, 'http://'+test_ip)
         script_page.login(driver, test_pw)
-        driver.find_element_by_id(css_id).click()
-        time.sleep(5)
-        driver.find_element_by_css_selector("input.netssid.setwireturn_input").clear()
-        time.sleep(1)
-        driver.find_element_by_css_selector("input.netssid.setwireturn_input").send_keys(ssid)
-        time.sleep(1)
-        driver.find_element_by_css_selector("a.subbtn.saveStatus > b").click()
-        time.sleep(16)
-        driver.find_element_by_css_selector("a.setup_return").click()
-        time.sleep(3)
-        script_page.open_url(driver, 'http://'+test_ip)
-        script_page.login(driver, test_pw)
-        driver.find_element_by_id(css_id).click()
-        time.sleep(5)
-        a = driver.find_element_by_css_selector("input.netssid.setwireturn_input").get_attribute("value")
+        a = ''
+        try:
+            driver.find_element_by_id(css_id).click()
+            time.sleep(5)
+            driver.find_element_by_css_selector("input.netssid.setwireturn_input").clear()
+            driver.find_element_by_css_selector("input.netssid.setwireturn_input").send_keys(ssid)
+            time.sleep(1)
+            driver.find_element_by_css_selector("a.subbtn.saveStatus > b").click()
+            time.sleep(10)
+            script_page.open_url(driver, 'http://'+test_ip)
+            script_page.login(driver, test_pw)
+            driver.find_element_by_id(css_id).click()
+            time.sleep(5)
+            a = driver.find_element_by_css_selector("input.netssid.setwireturn_input").get_attribute("value")
+        except Exception as e:
+            print(e)
         if ssid == a:
             print('1111')
         else:
