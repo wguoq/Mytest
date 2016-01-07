@@ -13,7 +13,7 @@ def open_url(driver, url):
         time.sleep(5)
         return 1
     except Exception as e:
-        logging.warning("===open url error=== %s", e)
+        logging.error("===open url error=== %s", e)
         return 0
 
 
@@ -31,10 +31,11 @@ def detect_wan(driver):
 
 def initialize(driver, url, password, pppoe_user='', pppoe_pwd=''):
     try:
-        time.sleep(3)
+        logging.debug('打开测试url')
         driver.get(url)
         time.sleep(3)
-        driver.find_element_by_id("init-protocol-checkbox").click()
+        logging.debug('点击开始配置')
+        driver.find_element_by_id("init_config-protocol-checkbox").click()
         time.sleep(3)
         driver.find_element_by_id("initalize").click()
         time.sleep(30)
@@ -51,22 +52,25 @@ def initialize(driver, url, password, pppoe_user='', pppoe_pwd=''):
                 logging.info('wan = ' + wan)
                 driver.find_element_by_link_text(u"下一步").click()
                 time.sleep(3)
+                logging.debug('输入拨号账号密码')
                 driver.find_element_by_id("username").clear()
-                driver.find_element_by_id("username").send_keys(username)
+                driver.find_element_by_id("username").send_keys(pppoe_user)
                 driver.find_element_by_id("password").clear()
-                driver.find_element_by_id("password").send_keys(pw)
+                driver.find_element_by_id("password").send_keys(pppoe_pwd)
                 driver.find_element_by_id("pppoe").click()
                 time.sleep(60)
+        logging.debug('输入wifi密码')
         driver.find_element_by_id("key").clear()
         time.sleep(3)
         driver.find_element_by_id("key").send_keys(password)
         time.sleep(3)
         driver.find_element_by_id("wifi").click()
         time.sleep(5)
+        logging.debug('点击 登录路由器')
         driver.find_element_by_link_text(u"登录路由器").click()
         return 1
     except Exception as e:
-        logging.warning("===init error=== %s", e)
+        logging.error("===init_config error=== %s", e)
         return 0
 
 
@@ -105,7 +109,7 @@ def initialize_y1(driver, url, password, username='', pw=''):
         driver.find_element_by_link_text(u"登录路由器").click()
         return 1
     except Exception as e:
-        logging.warning("===init error=== %s", e)
+        logging.error("===init_config error=== %s", e)
         return 0
 
 
@@ -120,7 +124,7 @@ def login(driver, password):
         if driver.find_element_by_css_selector("a.logo"):
             return 1
     except Exception as e:
-        logging.warning("===login error=== %s", e)
+        logging.error("===login error=== %s", e)
         return 0
 
 
@@ -137,7 +141,7 @@ def login_y1(driver, password):
         if driver.find_element_by_css_selector("a.logo"):
             return 1
     except Exception as e:
-        logging.warning("===login error=== %s", e)
+        logging.error("===login error=== %s", e)
         return 1
 
 
@@ -157,7 +161,7 @@ def set_5ssid(driver, value):
         time.sleep(3)
         return 1
     except Exception as e:
-        logging.warning("===set 5G ssid error=== %s ", e)
+        logging.error("===set 5G ssid error=== %s ", e)
         return 0
 
 
@@ -177,7 +181,7 @@ def set_24ssid(driver, value):
         time.sleep(3)
         return 1
     except Exception as e:
-        logging.warning("===set 2.4G ssid error=== %s ", e)
+        logging.error("===set 2.4G ssid error=== %s ", e)
         return 0
 
 
@@ -189,7 +193,7 @@ def get_5ssid(driver):
         time.sleep(5)
         return driver.find_element_by_css_selector("input.netssid.setwireturn_input").get_attribute("value")
     except Exception as e:
-        logging.warning("===get 5Gssid error=== %s", e)
+        logging.error("===get 5Gssid error=== %s", e)
         return None
 
 
@@ -201,7 +205,7 @@ def get_24ssid(driver):
         time.sleep(5)
         return driver.find_element_by_css_selector("input.netssid.setwireturn_input").get_attribute("value")
     except Exception as e:
-        logging.warning("===get 2.4gGssid error=== %s", e)
+        logging.error("===get 2.4gGssid error=== %s", e)
         return None
 
 
@@ -222,7 +226,7 @@ def reset(driver, wait_time):
         time.sleep(wait_time)
         return 1
     except Exception as e:
-        logging.warning("===reset error=== %s", e)
+        logging.error("===reset error=== %s", e)
         return 0
 
 
@@ -241,7 +245,7 @@ def restart(driver, wait_time):
         time.sleep(wait_time)
         return 1
     except Exception as e:
-        logging.warning("===restart error=== %s", e)
+        logging.error("===restart error=== %s", e)
         return 0
 
 
@@ -258,7 +262,7 @@ def upgrade(driver, build, wait_time):
         time.sleep(wait_time)
         return 1
     except Exception as e:
-        logging.warning("===upgrade error=== %s", e)
+        logging.error("===upgrade error=== %s", e)
         return 0
 
 
@@ -277,7 +281,7 @@ def upgrade_reset(driver, build, wait_time):
         time.sleep(wait_time)
         return 1
     except Exception as e:
-        logging.warning("===upgrade error=== %s", e)
+        logging.error("===upgrade error=== %s", e)
         return 0
 
 
@@ -286,7 +290,7 @@ def get_version(driver):
         logging.info("try get version...")
         return driver.find_element_by_css_selector("span.number").text
     except Exception as e:
-        logging.warning("===get version=== %s", e)
+        logging.error("===get version=== %s", e)
         return None
 
 
@@ -310,7 +314,7 @@ def connect_pppoe(driver, pst, pwd):
         else:
             return 0
     except Exception as e:
-        logging.warning('=== connect pppoe error=== %s', e)
+        logging.error('=== connect pppoe error=== %s', e)
         return 0
 
 
@@ -326,7 +330,7 @@ def disconnect_pppoe(driver):
         else:
             return 0
     except Exception as e:
-        logging.warning(e)
+        logging.error(e)
         return 0
 
 
@@ -342,5 +346,5 @@ def clone_cur_mac(driver):
         time.sleep(10)
         return cur_mac
     except Exception as e:
-        logging.warning('===clone mac error=== %s', e)
+        logging.error('===clone mac error=== %s', e)
         return 0

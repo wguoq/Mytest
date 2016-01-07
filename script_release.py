@@ -1,63 +1,70 @@
 import time
-import paramiko
-import tools
 import script_page
 import Test_file_view
+import logging
 
 
-def init(driver, configparser):
-    print('D1_initialize 支持不差网线，DHCP,拨号，完成配置进入首页算成功')
+def init_config(driver, configparser):
+    logging.info('D1_initialize 不插网线/DHCP/拨号都支持，完成配置进入首页算成功')
     default_ip = configparser.get('Default', 'default_ip')
     default_pw = configparser.get('Default', 'default_pw')
     pppoe_user = configparser.get('PPPOE', 'pppoe_user')
     pppoe_pwd = configparser.get('PPPOE', 'pppoe_pwd')
-    if script_page.initialize(driver, 'http://'+default_ip, default_pw, pppoe_user, pppoe_pwd) == 1:
-        print('init success')
+    logging.debug(' default_ip=' + str(default_ip) +
+                  ' default_pw=' + str(default_pw) +
+                  ' pppoe_user=' + str(pppoe_user) +
+                  ' pppoe_pwd=' + str(pppoe_pwd)
+                  )
+    if script_page.initialize(driver, 'http://' + default_ip, default_pw, pppoe_user, pppoe_pwd) == 1:
+        logging.info('init_config success')
     else:
-        print('init fail!!!')
+        logging.warning('init_config fail!!!')
 
 
 def login(driver, configparser):
-    print('D1_login 输入密码，进入首页就算成功')
+    logging.info('D1_login 输入密码，进入首页算成功')
     default_ip = configparser.get('Default', 'default_ip')
     default_pw = configparser.get('Default', 'default_pw')
-    script_page.open_url(driver, 'http://'+default_ip)
+    logging.debug(' default_ip=' + str(default_ip) +
+                  ' default_pw=' + str(default_pw))
+    script_page.open_url(driver, 'http://' + default_ip)
     if script_page.login(driver, default_pw) == 1:
-        print('login success')
+        logging.info('login success')
     else:
-        print('login fail!!!')
+        logging.warning('login fail!!!')
 
 
 def pppoe(driver, configparser):
-    print('D1_pppoe 输入账号密码拨号，页面返回连接成功就算成功，不验证是否上网')
+    logging.info('D1_pppoe 输入账号密码拨号，页面返回连接成功就算成功，不验证是否上网')
     pppoe_ip = configparser.get('PPPOE', 'pppoe_ip')
     pppoe_pw = configparser.get('PPPOE', 'pppoe_pw')
     pppoe_user = configparser.get('Default', 'pppoe_user')
     pppoe_pwd = configparser.get('Default', 'pppoe_pwd')
-    script_page.open_url(driver, 'http://'+pppoe_ip)
+    script_page.open_url(driver, 'http://' + pppoe_ip)
     script_page.login(driver, pppoe_pw)
     if script_page.connect_pppoe(driver, pppoe_user, pppoe_pwd) == 1:
-        print('pppoe connect success')
+        logging.info('pppoe connect success')
     else:
-        print('pppoe connect fail!!!')
+        logging.warning('pppoe connect fail!!!')
 
 
 def mac_clone(driver, configparser):
-    print('D1_mac_clone ')
+    logging.info('D1_mac_clone ')
     default_ip = configparser.get('Default', 'default_ip')
     default_pw = configparser.get('Default', 'default_pw')
-    script_page.open_url(driver, 'http://'+default_ip)
+    script_page.open_url(driver, 'http://' + default_ip)
     script_page.login(driver, default_pw)
     cur_mac = script_page.clone_cur_mac(driver)
-    script_page.open_url(driver, 'http://'+default_ip)
+    script_page.open_url(driver, 'http://' + default_ip)
     script_page.login(driver, default_pw)
     driver.find_element_by_css_selector('#clonemac > span').click()
     time.sleep(5)
     new_mac = driver.find_element_by_css_selector("input.clone_cur_inputmac").get_attribute("value")
     if cur_mac == new_mac:
-        print('mac clone success')
+        logging.info('mac clone success')
     else:
-        print('mac clone fail!!!')
+        logging.warning('mac clone fail!!!')
+
 
 '''
     a = []
@@ -79,12 +86,12 @@ def mac_clone(driver, configparser):
 
 
 def file_view(driver, configparser):
-    Test_file_view.file_view_folders(driver, configparser)
-    Test_file_view.file_view_files(driver, configparser)
+    Test_file_view.file_view_folders(driver, configparser, logging)
+    Test_file_view.file_view_files(driver, configparser, logging)
 
 
 def set_ssid(driver, configparser):
-    print('2.4ssid')
+    logging.info('2.4ssid')
     test_ip = configparser.get('Release', 'test_ip')
     test_pw = configparser.get('Release', 'test_pw')
     ssid24 = (configparser.get('Release', 'ssid24')).split(',')
@@ -93,8 +100,8 @@ def set_ssid(driver, configparser):
     id5 = 'wifinfo_5'
 
     def aaa(css_id, ssid):
-        print(ssid)
-        script_page.open_url(driver, 'http://'+test_ip)
+        logging.info(ssid)
+        script_page.open_url(driver, 'http://' + test_ip)
         script_page.login(driver, test_pw)
         a = ''
         try:
@@ -105,22 +112,24 @@ def set_ssid(driver, configparser):
             time.sleep(1)
             driver.find_element_by_css_selector("a.subbtn.saveStatus > b").click()
             time.sleep(10)
-            script_page.open_url(driver, 'http://'+test_ip)
+            script_page.open_url(driver, 'http://' + test_ip)
             script_page.login(driver, test_pw)
             driver.find_element_by_id(css_id).click()
             time.sleep(5)
             a = driver.find_element_by_css_selector("input.netssid.setwireturn_input").get_attribute("value")
         except Exception as e:
-            print(e)
+            logging.info(e)
         if ssid == a:
-            print('1111')
+            logging.info('set ssid success')
         else:
-            print('2222')
-            print(a)
-            print(ssid)
+            logging.warning('set ssid fail!!!')
+            logging.debug(a)
+            logging.debug(ssid)
     for ss in ssid24:
         aaa(id24, ss)
     for ss in ssid5:
         aaa(id5, ss)
 
 
+def new_password():
+    print('D1_new_password')

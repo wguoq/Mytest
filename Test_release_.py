@@ -1,11 +1,11 @@
 # -*- coding:utf-8 -*-
 import configparser
 import re
-
 import time
 from selenium import webdriver
 import tools
 import script_release
+import logging
 
 
 def get_case(test_list):
@@ -37,15 +37,28 @@ def ck_oder(test_case):
 
 
 if __name__ == '__main__':
-    chrome = webdriver.Chrome()
     config = configparser.ConfigParser()
     config.read('testconfig.ini', encoding='UTF-8')
-
+    logging.basicConfig(level=logging.DEBUG,
+                        format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                        datefmt='%a, %d %b %Y %H:%M:%S',
+                        filename='release.log',
+                        filemode='a',
+                        encoding='UTF-8')
+    #################################################################################################
+    # 定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，并将其添加到当前的日志处理对象#
+    console = logging.StreamHandler()
+    console.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(levelname)s:   %(message)s')
+    console.setFormatter(formatter)
+    logging.getLogger('').addHandler(console)
+    #################################################################################################
+    chrome = webdriver.Chrome()
     with open('testlist.txt', 'r', encoding='utf-8') as f:
         ts_case = get_case(f.readlines())
-        print(ts_case)
+    print(ts_case)
 
-    script = {'D1_initialize': (script_release.init, [chrome, config]),
+    script = {'D1_initialize': (script_release.init_config, [chrome, config]),
               'D1_login': (script_release.login, [chrome, config]),
               'D1_pppoe': (script_release.pppoe, [chrome, config]),
               'D1_mac_clone': (script_release.mac_clone, [chrome, config]),
@@ -63,4 +76,3 @@ if __name__ == '__main__':
             func(*param)
             time.sleep(60)
     chrome.quit()
-

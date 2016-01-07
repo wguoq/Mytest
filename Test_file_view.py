@@ -36,7 +36,7 @@ def mk_xpath(x):
     return '//a[contains(text(),"{name}")]'.format(name=x)
 
 
-def file_view_folders(driver, configparser):
+def file_view_folders(driver, configparser, logging):
     samba_ip = configparser.get('Samba', 'samba_ip')
     samba_pw = configparser.get('Samba', 'samba_pw')
     drive_letter = configparser.get('Samba', 'drive_letter')
@@ -66,8 +66,7 @@ def file_view_folders(driver, configparser):
             print(e)
 
 
-
-def file_view_files(driver, configparser):
+def file_view_files(driver, configparser, logging):
     samba_ip = configparser.get('Samba', 'samba_ip')
     samba_pw = configparser.get('Samba', 'samba_pw')
     drive_letter = configparser.get('Samba', 'drive_letter')
