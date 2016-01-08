@@ -1,5 +1,6 @@
 import configparser
 import time
+import urllib.request
 import script_page
 import Test_file_view
 import logging
@@ -102,22 +103,22 @@ def file_view(driver, config_parser):
 
 def set_ssid(driver, config_parser):
     logging.info('D1_set_ssid， 修改2.4G和5G的ssid')
-    test_ip = config_parser.get('Release', 'test_ip')
-    test_pw = config_parser.get('Release', 'test_pw')
-    ssid24 = (config_parser.get('Release', 'ssid24')).split(',')
-    ssid5 = (config_parser.get('Release', 'ssid5')).split(',')
+    ssid_ip = config_parser.get('SSID', 'test_ip')
+    ssid_pw = config_parser.get('SSID', 'test_pw')
+    ssid24 = (config_parser.get('SSID', 'ssid24')).split(',')
+    ssid5 = (config_parser.get('SSID', 'ssid5')).split(',')
     id24 = 'wifinfo_24'
     id5 = 'wifinfo_5'
-    logging.debug(' test_ip=' + str(test_ip) + '\n' +
-                  ' test_pw=' + str(test_pw) + '\n' +
+    logging.debug(' test_ip=' + str(ssid_ip) + '\n' +
+                  ' test_pw=' + str(ssid_pw) + '\n' +
                   ' ssid24=' + str(ssid24) + '\n' +
                   ' ssid5=' + str(ssid5)
                   )
 
     def aaa(css_id, ssid):
         logging.info(ssid)
-        script_page.open_url(driver, 'http://' + test_ip)
-        script_page.login(driver, test_pw)
+        script_page.open_url(driver, 'http://' + ssid_ip)
+        script_page.login(driver, ssid_pw)
         a = ''
         try:
             driver.find_element_by_id(css_id).click()
@@ -127,8 +128,8 @@ def set_ssid(driver, config_parser):
             time.sleep(1)
             driver.find_element_by_css_selector("a.subbtn.saveStatus > b").click()
             time.sleep(10)
-            script_page.open_url(driver, 'http://' + test_ip)
-            script_page.login(driver, test_pw)
+            script_page.open_url(driver, 'http://' + ssid_ip)
+            script_page.login(driver, ssid_pw)
             driver.find_element_by_id(css_id).click()
             time.sleep(5)
             a = driver.find_element_by_css_selector("input.netssid.setwireturn_input").get_attribute("value")
@@ -148,6 +149,7 @@ def set_ssid(driver, config_parser):
 
 def new_password(driver, config_parser):
     logging.info('D1_new_password 修改管理员密码，重新登录算成功')
+
     pass_ip = config_parser.get('Password', 'pass_ip')
     pass_pw = [config_parser.get('Password', 'pass_pw')]
     password = (config_parser.get('Password', 'password')).split(',')
@@ -163,7 +165,7 @@ def new_password(driver, config_parser):
             script_page.open_url(driver, 'http://'+pass_ip)
             script_page.login(driver, old_passwd)
             logging.debug('进入密码修改页面')
-            driver.find_element_by_css_selector('a.setpasswd').click()
+            driver.find_element_by_id('setpasswd').click()
             time.sleep(5)
             logging.debug('输入旧密码')
             driver.find_element_by_id("oldPasswd").clear()
@@ -194,3 +196,69 @@ def new_password(driver, config_parser):
         logging.info('recover password success new_pwd='+str(ppp[0]))
     else:
         logging.warning('recover password fail!!!')
+
+
+def qos(driver, config_parser):
+    logging.info('D1_QOS ')
+    qos_ip = config_parser.get('Qos', 'qos_ip')
+    qos_pw = config_parser.get('Qos', 'qos_pw')
+    down_speed = config_parser.get('Qos', 'down_speed')
+    up_speed = config_parser.get('Qos', 'up_speed')
+    down_url = config_parser.get('Qos', 'down_url')
+
+    def aaa(down, up):
+        try:
+            script_page.open_url(driver, 'http://'+qos_ip)
+            script_page.login(driver, qos_pw)
+            driver.find_element_by_id('qosselect').click()
+            time.sleep(5)
+            driver.find_element_by_css_selector("input.qosturn").click()
+            time.sleep(1)
+            driver.find_element_by_css_selector("input.qosipstore.downkbps").clear()
+            time.sleep(1)
+            driver.find_element_by_css_selector("input.qosipstore.downkbps").send_keys(down)
+            time.sleep(1)
+            driver.find_element_by_css_selector("input.qosipstore.upkbps").clear()
+            time.sleep(1)
+            driver.find_element_by_css_selector("input.qosipstore.upkbps").send_keys(up)
+            time.sleep(1)
+            driver.find_element_by_css_selector("a.subbtn.save_smartqosnet > b").click()
+            time.sleep(20)
+            return 1
+        except Exception as e:
+            return 0
+
+    def download(url, localfile='temp'):
+        size = 0
+        url = url.strip()
+        try:
+            s = time.time()
+            result = urllib.request.urlretrieve(url, localfile,)
+            e = time.time()
+            t = e - s
+            headers = result[1]
+            if 'Content-Length' in headers:
+                size = int(headers['Content-Length'])
+            return {'result': 'success', 'localfile': localfile, 'size': size, 'time': t}
+        except Exception as e:
+            return {'result': e, 'localfile': None, 'size': 0, 'time': 0}
+
+    if aaa(down_speed, up_speed) == 1:
+        data = download(down_url)
+        if data.get('result') == 'success':
+            size = round(data.get('size')/1024, 2)
+            t = round(data.get('time'), 2)
+            speed = round(size/t, 2)
+            if int(speed) < int(down_speed)*1024/8:
+                print('1111')
+            else:
+                print('222')
+
+
+
+
+
+driver = webdriver.Chrome()
+config = configparser.ConfigParser()
+config.read('testconfig.ini', encoding='UTF-8')
+qos(driver, config)
