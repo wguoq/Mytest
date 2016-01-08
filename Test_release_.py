@@ -3,7 +3,6 @@ import configparser
 import re
 import time
 from selenium import webdriver
-import tools
 import script_release
 import logging
 
@@ -39,40 +38,38 @@ def ck_oder(test_case):
 if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read('testconfig.ini', encoding='UTF-8')
+    #记录日志的级别：DEBUG,INFO,WARN,ERROR
     logging.basicConfig(level=logging.DEBUG,
-                        format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                        format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s:\n%(message)s',
                         datefmt='%a, %d %b %Y %H:%M:%S',
-                        filename='release.log',
+                        filename='release_test.log',
                         filemode='a',
                         encoding='UTF-8')
-    #################################################################################################
-    # 定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，并将其添加到当前的日志处理对象#
+    #将INFO级别以上的日志信息打印到console
     console = logging.StreamHandler()
-    console.setLevel(logging.DEBUG)
+    console.setLevel(logging.INFO)
     formatter = logging.Formatter('%(levelname)s:   %(message)s')
     console.setFormatter(formatter)
     logging.getLogger('').addHandler(console)
-    #################################################################################################
-    chrome = webdriver.Chrome()
     with open('testlist.txt', 'r', encoding='utf-8') as f:
         ts_case = get_case(f.readlines())
-    print(ts_case)
-
+    logging.info(ts_case)
+    chrome = webdriver.Chrome()
     script = {'D1_initialize': (script_release.init_config, [chrome, config]),
               'D1_login': (script_release.login, [chrome, config]),
               'D1_pppoe': (script_release.pppoe, [chrome, config]),
               'D1_mac_clone': (script_release.mac_clone, [chrome, config]),
               'D1_file_view': (script_release.file_view, [chrome, config]),
-              'D1_SSID': (script_release.set_ssid, [chrome, config])}
-
+              'D1_SSID': (script_release.set_ssid, [chrome, config]),
+              'D1_set_pwd': (script_release.new_password, [chrome, config])}
     if ck_format(ts_case) & ck_oder(ts_case) == 1:
         test = []
         for t in ts_case:
             if t[1] in script:
                 test.append(script.get(t[1]))
             else:
-                print(t[1], ' is not in script')
+                logging.info(t[1], ' is not in script')
         for func, param in test:
             func(*param)
-            time.sleep(60)
+            time.sleep(10)
     chrome.quit()

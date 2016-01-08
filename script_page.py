@@ -33,9 +33,9 @@ def initialize(driver, url, password, pppoe_user='', pppoe_pwd=''):
     try:
         logging.debug('打开测试url')
         driver.get(url)
-        time.sleep(3)
+        time.sleep(10)
         logging.debug('点击开始配置')
-        driver.find_element_by_id("init_config-protocol-checkbox").click()
+        driver.find_element_by_id("init-protocol-checkbox").click()
         time.sleep(3)
         driver.find_element_by_id("initalize").click()
         time.sleep(30)
@@ -337,11 +337,14 @@ def disconnect_pppoe(driver):
 def clone_cur_mac(driver):
     try:
         logging.info("try clone_cur_mac...")
+        logging.debug('点击mac克隆页面')
         driver.find_element_by_css_selector('#clonemac > span').click()
         time.sleep(3)
+        logging.debug('点击 克隆MAC地址 按钮')
         cur_mac = driver.find_element_by_css_selector("span.clone_cur_mac").text
         driver.find_element_by_link_text(u"克隆MAC地址").click()
         time.sleep(1)
+        logging.debug('点击保存按钮')
         driver.find_element_by_css_selector("a.subbtn.macsave > b").click()
         time.sleep(10)
         return cur_mac
