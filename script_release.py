@@ -1,5 +1,7 @@
 import configparser
+import os
 import time
+import requests
 import urllib.request
 import script_page
 import Test_file_view
@@ -76,6 +78,8 @@ def mac_clone(driver, config_parser):
             logging.warning('mac clone fail!!!')
     except Exception as e:
         logging.debug(e)
+
+
 '''
     a = []
     try:
@@ -141,6 +145,7 @@ def set_ssid(driver, config_parser):
             logging.warning('set ssid fail!!!')
             logging.debug(a)
             logging.debug(ssid)
+
     for ss in ssid24:
         aaa(id24, ss)
     for ss in ssid5:
@@ -153,16 +158,16 @@ def new_password(driver, config_parser):
     pass_ip = config_parser.get('Password', 'pass_ip')
     pass_pw = [config_parser.get('Password', 'pass_pw')]
     password = (config_parser.get('Password', 'password')).split(',')
-    ppp = pass_pw+password
+    ppp = pass_pw + password
 
     logging.debug(' pass_ip=' + str(pass_ip) + '\n' +
                   ' pass_pw=' + str(pass_pw) + '\n' +
                   ' password=' + str(password)
                   )
 
-    def aaa(old_passwd, new_passwd):
+    def setpasswd(old_passwd, new_passwd):
         try:
-            script_page.open_url(driver, 'http://'+pass_ip)
+            script_page.open_url(driver, 'http://' + pass_ip)
             script_page.login(driver, old_passwd)
             logging.debug('进入密码修改页面')
             driver.find_element_by_id('setpasswd').click()
@@ -178,22 +183,22 @@ def new_password(driver, config_parser):
             logging.debug('点击确定')
             driver.find_element_by_id("setNewPasswd").click()
             time.sleep(10)
-            script_page.open_url(driver, 'http://'+pass_ip)
+            script_page.open_url(driver, 'http://' + pass_ip)
             script_page.login(driver, new_passwd)
             return 1
         except Exception as e:
             logging.error(e)
             return 0
 
-    for i in range(len(ppp)-1):
-        logging.debug('旧密码='+str(ppp[i]))
-        logging.debug('新密码='+str(ppp[i+1]))
-        if aaa(ppp[i], ppp[i+1]) == 1:
-            logging.info('set password success new_pwd='+str(ppp[i+1]))
+    for i in range(len(ppp) - 1):
+        logging.debug('旧密码=' + str(ppp[i]))
+        logging.debug('新密码=' + str(ppp[i + 1]))
+        if setpasswd(ppp[i], ppp[i + 1]) == 1:
+            logging.info('set password success new_pwd=' + str(ppp[i + 1]))
         else:
             logging.warning('set password fail!!!')
-    if aaa(ppp[-1], ppp[0]) == 1:
-        logging.info('recover password success new_pwd='+str(ppp[0]))
+    if setpasswd(ppp[-1], ppp[0]) == 1:
+        logging.info('recover password success new_pwd=' + str(ppp[0]))
     else:
         logging.warning('recover password fail!!!')
 
@@ -202,18 +207,24 @@ def qos(driver, config_parser):
     logging.info('D1_QOS ')
     qos_ip = config_parser.get('Qos', 'qos_ip')
     qos_pw = config_parser.get('Qos', 'qos_pw')
-    down_speed = config_parser.get('Qos', 'down_speed')
-    up_speed = config_parser.get('Qos', 'up_speed')
+    down_limit = config_parser.get('Qos', 'down_limit')
+    up_limit = config_parser.get('Qos', 'up_limit')
     down_url = config_parser.get('Qos', 'down_url')
+    up_url = config_parser.get('Qos', 'up_url')
+    up_file = config_parser.get('Qos', 'up_file')
+    data = {'file': open(up_file, 'rb')}
 
-    def aaa(down, up):
+    def qosturn(down, up):
         try:
-            script_page.open_url(driver, 'http://'+qos_ip)
+            script_page.open_url(driver, 'http://' + qos_ip)
             script_page.login(driver, qos_pw)
+            logging.debug('进入QOS页面')
             driver.find_element_by_id('qosselect').click()
             time.sleep(5)
+            logging.debug('打开QOS开关')
             driver.find_element_by_css_selector("input.qosturn").click()
             time.sleep(1)
+            logging.debug('输入下载，上传速度')
             driver.find_element_by_css_selector("input.qosipstore.downkbps").clear()
             time.sleep(1)
             driver.find_element_by_css_selector("input.qosipstore.downkbps").send_keys(down)
@@ -222,43 +233,79 @@ def qos(driver, config_parser):
             time.sleep(1)
             driver.find_element_by_css_selector("input.qosipstore.upkbps").send_keys(up)
             time.sleep(1)
+            logging.debug('点击保存')
             driver.find_element_by_css_selector("a.subbtn.save_smartqosnet > b").click()
             time.sleep(20)
             return 1
         except Exception as e:
+            logging.debug(e)
             return 0
 
-    def download(url, localfile='temp'):
-        size = 0
+    def download(url):
         url = url.strip()
         try:
             s = time.time()
-            result = urllib.request.urlretrieve(url, localfile,)
+            result = urllib.request.urlretrieve(url, 'temp', )
             e = time.time()
-            t = e - s
+            down_time = e - s
             headers = result[1]
             if 'Content-Length' in headers:
-                size = int(headers['Content-Length'])
-            return {'result': 'success', 'localfile': localfile, 'size': size, 'time': t}
+                file_size = int(headers['Content-Length'])
+            else:
+                file_size = 0
+            return {'result': 'success', 'size': file_size, 'time': down_time}
         except Exception as e:
-            return {'result': e, 'localfile': None, 'size': 0, 'time': 0}
+            return {'result': e, 'size': 0, 'time': 0}
 
-    if aaa(down_speed, up_speed) == 1:
-        data = download(down_url)
-        if data.get('result') == 'success':
-            size = round(data.get('size')/1024, 2)
-            t = round(data.get('time'), 2)
-            speed = round(size/t, 2)
-            if int(speed) < int(down_speed)*1024/8:
+    def upload(url, file):
+        try:
+            s = time.time()
+            result = requests.post(url, files=data)
+            e = time.time()
+            up_time = e - s
+            if '200' in str(result):
+                return up_time
+            else:
+                return -1
+        except Exception as e:
+            logging.debug(e)
+            pass
+
+    if qosturn(down_limit, up_limit) == 1:
+        down_res = download(down_url)
+        if down_res.get('result') == 'success':
+            size = round(down_res.get('size') / 1024, 2)
+            t = round(down_res.get('time'), 2)
+            speed = round(size / t, 2)
+            print(speed)
+            print(int(down_limit) * 1024 / 8)
+            if int(speed) < int(down_limit) * 1024 / 8:
                 print('1111')
             else:
                 print('222')
+        size = os.path.getsize(up_file)
+        up_res = upload(up_url, up_file)
+        if up_res > 0:
+            up_speed = size/up_res
+            print(up_speed)
 
 
 
 
 
-driver = webdriver.Chrome()
+
+# driver = webdriver.Chrome()
 config = configparser.ConfigParser()
 config.read('testconfig.ini', encoding='UTF-8')
-qos(driver, config)
+# qos(driver, config)
+down_url = config.get('Qos', 'down_url')
+up_url = config.get('Qos', 'up_url')
+up_file = config.get('Qos', 'up_file')
+data = {'file': open(up_file, 'rb')}
+s = time.time()
+result = requests.post(up_url, files=data)
+e = time.time()
+up_time = e - s
+size = os.path.getsize(up_file)
+print(up_time)
+print(size/up_time)
