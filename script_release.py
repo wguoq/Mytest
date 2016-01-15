@@ -119,7 +119,7 @@ def set_ssid(driver, config_parser):
                   ' ssid5=' + str(ssid5)
                   )
 
-    def aaa(css_id, ssid):
+    def input_ssid(css_id, ssid):
         logging.info(ssid)
         script_page.open_url(driver, 'http://' + ssid_ip)
         script_page.login(driver, ssid_pw)
@@ -147,9 +147,9 @@ def set_ssid(driver, config_parser):
             logging.debug(ssid)
 
     for ss in ssid24:
-        aaa(id24, ss)
+        input_ssid(id24, ss)
     for ss in ssid5:
-        aaa(id5, ss)
+        input_ssid(id5, ss)
 
 
 def new_password(driver, config_parser):
@@ -214,6 +214,15 @@ def qos(driver, config_parser):
     up_file = config_parser.get('Qos', 'up_file')
     data = {'file': open(up_file, 'rb')}
 
+    logging.debug(' qos_ip=' + str(qos_ip) + '\n' +
+                  ' qos_pw=' + str(qos_pw) + '\n' +
+                  ' down_limit=' + str(down_limit) + '\n' +
+                  ' up_limit=' + str(up_limit) + '\n' +
+                  ' down_url=' + str(down_url) +'\n' +
+                  ' up_url=' + str(up_url) + '\n' +
+                  ' up_file=' + str(up_file)
+                  )
+
     def qosturn(down, up):
         try:
             script_page.open_url(driver, 'http://' + qos_ip)
@@ -269,43 +278,27 @@ def qos(driver, config_parser):
                 return -1
         except Exception as e:
             logging.debug(e)
-            pass
+            return -1
 
     if qosturn(down_limit, up_limit) == 1:
         down_res = download(down_url)
         if down_res.get('result') == 'success':
             size = round(down_res.get('size') / 1024, 2)
             t = round(down_res.get('time'), 2)
-            speed = round(size / t, 2)
-            print(speed)
+            down_speed = round(size / t, 2)
+            print(down_speed)
             print(int(down_limit) * 1024 / 8)
-            if int(speed) < int(down_limit) * 1024 / 8:
-                print('1111')
+            if int(down_speed) < int(down_limit) * 1024 / 8:
+                logging.info('download limit success')
             else:
-                print('222')
-        size = os.path.getsize(up_file)
+                logging.warning('download limit fail!!!')
+        size = os.path.getsize(up_file)/1024
         up_res = upload(up_url, up_file)
+        print(up_res)
         if up_res > 0:
             up_speed = size/up_res
             print(up_speed)
-
-
-
-
-
-
-# driver = webdriver.Chrome()
-config = configparser.ConfigParser()
-config.read('testconfig.ini', encoding='UTF-8')
-# qos(driver, config)
-down_url = config.get('Qos', 'down_url')
-up_url = config.get('Qos', 'up_url')
-up_file = config.get('Qos', 'up_file')
-data = {'file': open(up_file, 'rb')}
-s = time.time()
-result = requests.post(up_url, files=data)
-e = time.time()
-up_time = e - s
-size = os.path.getsize(up_file)
-print(up_time)
-print(size/up_time)
+            if int(up_speed) < int(up_limit) * 1024 / 8:
+                logging.info('up limit success')
+            else:
+                logging.warning('up limit fail!!!')
