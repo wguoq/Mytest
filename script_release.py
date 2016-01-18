@@ -1,4 +1,3 @@
-import configparser
 import os
 import time
 import requests
@@ -6,7 +5,6 @@ import urllib.request
 import script_page
 import Test_file_view
 import logging
-from selenium import webdriver
 
 
 def init_config(driver, config_parser):
@@ -21,9 +19,9 @@ def init_config(driver, config_parser):
                   ' pppoe_pwd=' + str(pppoe_pwd)
                   )
     if script_page.initialize(driver, 'http://' + default_ip, default_pw, pppoe_user, pppoe_pwd) == 1:
-        logging.info('init_config success')
+        logging.info('test init_config success')
     else:
-        logging.warning('init_config fail!!!')
+        logging.warning('test init_config fail!!!')
 
 
 def login(driver, config_parser):
@@ -34,9 +32,9 @@ def login(driver, config_parser):
                   ' default_pw=' + str(default_pw))
     script_page.open_url(driver, 'http://' + default_ip)
     if script_page.login(driver, default_pw) == 1:
-        logging.info('login success')
+        logging.info('test login success')
     else:
-        logging.warning('login fail!!!')
+        logging.warning('test login fail!!!')
 
 
 def pppoe(driver, config_parser):
@@ -52,9 +50,9 @@ def pppoe(driver, config_parser):
     script_page.open_url(driver, 'http://' + pppoe_ip)
     script_page.login(driver, pppoe_pw)
     if script_page.connect_pppoe(driver, pppoe_user, pppoe_pwd) == 1:
-        logging.info('pppoe connect success')
+        logging.info('test pppoe connect success')
     else:
-        logging.warning('pppoe connect fail!!!')
+        logging.warning('test pppoe connect fail!!!')
 
 
 def mac_clone(driver, config_parser):
@@ -73,9 +71,9 @@ def mac_clone(driver, config_parser):
         logging.debug('获取当前mac地址')
         new_mac = driver.find_element_by_css_selector("input.clone_cur_inputmac").get_attribute("value")
         if cur_mac == new_mac:
-            logging.info('mac clone success')
+            logging.info('test mac clone success')
         else:
-            logging.warning('mac clone fail!!!')
+            logging.warning('test mac clone fail!!!')
     except Exception as e:
         logging.debug(e)
 
@@ -140,9 +138,9 @@ def set_ssid(driver, config_parser):
         except Exception as e:
             logging.info(e)
         if ssid == a:
-            logging.info('set ssid success')
+            logging.info('test set ssid success')
         else:
-            logging.warning('set ssid fail!!!')
+            logging.warning('test set ssid fail!!!')
             logging.debug(a)
             logging.debug(ssid)
 
@@ -194,9 +192,9 @@ def new_password(driver, config_parser):
         logging.debug('旧密码=' + str(ppp[i]))
         logging.debug('新密码=' + str(ppp[i + 1]))
         if setpasswd(ppp[i], ppp[i + 1]) == 1:
-            logging.info('set password success new_pwd=' + str(ppp[i + 1]))
+            logging.info('test set password success new_pwd=' + str(ppp[i + 1]))
         else:
-            logging.warning('set password fail!!!')
+            logging.warning('test set password fail!!!')
     if setpasswd(ppp[-1], ppp[0]) == 1:
         logging.info('recover password success new_pwd=' + str(ppp[0]))
     else:
@@ -289,9 +287,9 @@ def qos(driver, config_parser):
             print(down_speed)
             print(int(down_limit) * 1024 / 8)
             if int(down_speed) < int(down_limit) * 1024 / 8:
-                logging.info('download limit success')
+                logging.info('test download limit success')
             else:
-                logging.warning('download limit fail!!!')
+                logging.warning('test download limit fail!!!')
         size = os.path.getsize(up_file)/1024
         up_res = upload(up_url, up_file)
         print(up_res)
@@ -299,6 +297,6 @@ def qos(driver, config_parser):
             up_speed = size/up_res
             print(up_speed)
             if int(up_speed) < int(up_limit) * 1024 / 8:
-                logging.info('up limit success')
+                logging.info('test up limit success')
             else:
-                logging.warning('up limit fail!!!')
+                logging.warning('test up limit fail!!!')

@@ -1,10 +1,10 @@
 #顺序.测试用例名字
 #测试用例名字与方法的对应在Test_release文件里
 
-#1.D1_initialize
-#2.D1_login
-#3.D1_pppoe
-#4.D1_mac_clone
+1.D1_initialize
+2.D1_login
+3.D1_pppoe
+4.D1_mac_clone
 5.D1_file_view
 6.D1_SSID
 7.D1_set_pwd
