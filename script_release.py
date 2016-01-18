@@ -119,7 +119,7 @@ def set_ssid(driver, config_parser):
         except Exception as e:
             logging.info(e)
         if ssid == a:
-            logging.info('test set ssid success')
+            logging.info('test set ssid success ssid='+ssid)
         else:
             logging.warning('test set ssid fail!!!')
             logging.debug(a)
