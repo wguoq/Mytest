@@ -78,25 +78,6 @@ def mac_clone(driver, config_parser):
         logging.debug(e)
 
 
-'''
-    a = []
-    try:
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect('192.168.99.1', port=22, username='root', password=default_pw)
-        stdin, stdout, stderr = ssh.exec_command('ifconfig eth0.2')
-        a = tools.find_flag(stdout, 'HWaddr')
-        ssh.close()
-    except Exception as e:
-        print(e)
-    HWaddr = str(a[0])
-    if cur_mac == HWaddr[HWaddr.find('HWaddr')+len('HWaddr'):].lower().strip():
-        print('mac clone success')
-    else:
-        print('mac clone fail!!!')
-'''
-
-
 def file_view(driver, config_parser):
     logging.info('D1_file_view 遍历映射盘符下所有文件夹和文件与页面上 文件查看 结果对比')
     Test_file_view.file_view_folders(driver, config_parser)
@@ -180,7 +161,7 @@ def new_password(driver, config_parser):
             driver.find_element_by_id("renewPasswd").send_keys(new_passwd)
             logging.debug('点击确定')
             driver.find_element_by_id("setNewPasswd").click()
-            time.sleep(10)
+            time.sleep(20)
             script_page.open_url(driver, 'http://' + pass_ip)
             script_page.login(driver, new_passwd)
             return 1
@@ -262,6 +243,7 @@ def qos(driver, config_parser):
                 file_size = 0
             return {'result': 'success', 'size': file_size, 'time': down_time}
         except Exception as e:
+            logging.debug(e)
             return {'result': e, 'size': 0, 'time': 0}
 
     def upload(url, file):
@@ -279,23 +261,21 @@ def qos(driver, config_parser):
             return -1
 
     if qosturn(down_limit, up_limit) == 1:
+        logging.debug('===download===')
         down_res = download(down_url)
         if down_res.get('result') == 'success':
             size = round(down_res.get('size') / 1024, 2)
             t = round(down_res.get('time'), 2)
             down_speed = round(size / t, 2)
-            print(down_speed)
-            print(int(down_limit) * 1024 / 8)
             if int(down_speed) < int(down_limit) * 1024 / 8:
                 logging.info('test download limit success')
             else:
                 logging.warning('test download limit fail!!!')
         size = os.path.getsize(up_file)/1024
+        logging.debug('===upload===')
         up_res = upload(up_url, up_file)
-        print(up_res)
         if up_res > 0:
             up_speed = size/up_res
-            print(up_speed)
             if int(up_speed) < int(up_limit) * 1024 / 8:
                 logging.info('test up limit success')
             else:

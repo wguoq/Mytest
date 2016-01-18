@@ -17,7 +17,7 @@ def get_case(test_list):
 def ck_format(test_case):
     for i in test_case:
         if len(i) != 2:
-            print('格式错误: ', '.'.join(i))
+            logging.warning('格式错误: ', '.'.join(i))
             return 0
     return 1
 
@@ -29,7 +29,7 @@ def ck_oder(test_case):
         b = test_case[:i]
         for c in b:
             if a[0] == c[0]:
-                print('序号重复：', '.'.join(a), '  ', '.'.join(c))
+                logging.warning('序号重复：', '.'.join(a), '  ', '.'.join(c))
                 return 0
         i -= 1
     return 1

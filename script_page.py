@@ -83,8 +83,7 @@ def initialize_y1(driver, url, password, username='', pw=''):
             for a in flag:
                 if tip.find(a) > -1:
                     return a
-        except Exception as e:
-            print(e)
+        except:
             return 0
     try:
         time.sleep(3)

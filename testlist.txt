@@ -7,6 +7,5 @@
 4.D1_mac_clone
 5.D1_file_view
 6.D1_SSID
-7.D1_set_pwd
-8.D1_QOS
-9.D1_test
+8.D1_set_pwd
+7.D1_QOS
