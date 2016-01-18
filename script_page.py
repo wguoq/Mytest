@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import Select
 def open_url(driver, url):
     time.sleep(1)
     try:
-        logging.info("try open " + url)
+        logging.info("try open url " + url)
         driver.get(url)
         time.sleep(5)
         return 1
@@ -17,19 +17,19 @@ def open_url(driver, url):
         return 0
 
 
-def detect_wan(driver):
-    flag = ['运营商', 'DHCP']
-    try:
-        tip = str(driver.find_element_by_css_selector("p.tips-text").text)
-        for a in flag:
-            if tip.find(a) > -1:
-                return a
-    except Exception as e:
-        print(e)
-        return 0
-
-
 def initialize(driver, url, password, pppoe_user='', pppoe_pwd=''):
+    logging.info('init_config')
+
+    def detect_wan():
+        flag = ['运营商', 'DHCP']
+        try:
+            tip = str(driver.find_element_by_css_selector("p.tips-text").text)
+            for a in flag:
+                if tip.find(a) > -1:
+                    return a
+        except Exception as e:
+            print(e)
+            return 0
     try:
         logging.debug('打开测试url')
         driver.get(url)
@@ -39,17 +39,17 @@ def initialize(driver, url, password, pppoe_user='', pppoe_pwd=''):
         time.sleep(3)
         driver.find_element_by_id("initalize").click()
         time.sleep(30)
-        wan = detect_wan(driver)
+        wan = detect_wan()
         if wan == 0:
-            logging.info('wan = 跳过检测')
+            logging.debug('wan = 跳过检测')
             driver.find_element_by_link_text(u"跳过检测").click()
         else:
             if 'DHCP' == wan:
-                logging.info('wan = ' + wan)
+                logging.debug('wan = ' + wan)
                 driver.find_element_by_link_text(u"下一步").click()
                 time.sleep(10)
             if '运营商' == wan:
-                logging.info('wan = ' + wan)
+                logging.debug('wan = ' + wan)
                 driver.find_element_by_link_text(u"下一步").click()
                 time.sleep(3)
                 logging.debug('输入拨号账号密码')
@@ -75,13 +75,25 @@ def initialize(driver, url, password, pppoe_user='', pppoe_pwd=''):
 
 
 def initialize_y1(driver, url, password, username='', pw=''):
+    logging.info('init_config')
+
+    def detect_wan():
+        flag = ['运营商', 'DHCP']
+        try:
+            tip = str(driver.find_element_by_css_selector("p.tips-text").text)
+            for a in flag:
+                if tip.find(a) > -1:
+                    return a
+        except Exception as e:
+            print(e)
+            return 0
     try:
         time.sleep(3)
         driver.get(url)
         time.sleep(3)
         driver.find_element_by_id("initalize").click()
         time.sleep(30)
-        wan = detect_wan(driver)
+        wan = detect_wan()
         if wan == 0:
             logging.info('wan = 跳过检测')
             driver.find_element_by_link_text(u"跳过检测").click()
@@ -290,7 +302,7 @@ def get_version(driver):
         logging.info("try get version...")
         return driver.find_element_by_css_selector("span.number").text
     except Exception as e:
-        logging.error("===get version=== %s", e)
+        logging.error("===get version error=== %s", e)
         return None
 
 

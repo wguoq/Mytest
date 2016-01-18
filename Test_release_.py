@@ -39,15 +39,15 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read('testconfig.ini', encoding='UTF-8')
     #记录日志的级别：DEBUG,INFO,WARN,ERROR
-    logging.basicConfig(level=logging.INFO,
+    logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s:\n%(message)s',
                         datefmt='%a, %d %b %Y %H:%M:%S',
                         filename='release_test.log',
                         filemode='a',
                         encoding='UTF-8')
-    #将DEBUG级别以上的日志信息打印到console
+    #将INFO级别以上的日志信息打印到console
     console = logging.StreamHandler()
-    console.setLevel(logging.DEBUG)
+    console.setLevel(logging.INFO)
     formatter = logging.Formatter('%(levelname)s:   %(message)s')
     console.setFormatter(formatter)
     logging.getLogger('').addHandler(console)
@@ -72,7 +72,7 @@ if __name__ == '__main__':
             if t[1] in script:
                 test.append(script.get(t[1]))
             else:
-                logging.info(t[1], ' is not in script')
+                logging.warning(str(t) + ' is not in script')
         for func, param in test:
             func(*param)
             time.sleep(10)

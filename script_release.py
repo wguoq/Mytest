@@ -43,8 +43,8 @@ def pppoe(driver, config_parser):
     logging.info('D1_pppoe 输入账号密码拨号，页面返回连接成功就算成功，不验证是否上网')
     pppoe_ip = config_parser.get('PPPOE', 'pppoe_ip')
     pppoe_pw = config_parser.get('PPPOE', 'pppoe_pw')
-    pppoe_user = config_parser.get('Default', 'pppoe_user')
-    pppoe_pwd = config_parser.get('Default', 'pppoe_pwd')
+    pppoe_user = config_parser.get('PPPOE', 'pppoe_user')
+    pppoe_pwd = config_parser.get('PPPOE', 'pppoe_pwd')
     logging.debug(' pppoe_ip=' + str(pppoe_ip) + '\n' +
                   ' pppoe_pw=' + str(pppoe_pw) + '\n' +
                   ' pppoe_user=' + str(pppoe_user) + '\n' +
@@ -107,8 +107,8 @@ def file_view(driver, config_parser):
 
 def set_ssid(driver, config_parser):
     logging.info('D1_set_ssid， 修改2.4G和5G的ssid')
-    ssid_ip = config_parser.get('SSID', 'test_ip')
-    ssid_pw = config_parser.get('SSID', 'test_pw')
+    ssid_ip = config_parser.get('SSID', 'ssid_ip')
+    ssid_pw = config_parser.get('SSID', 'ssid_pw')
     ssid24 = (config_parser.get('SSID', 'ssid24')).split(',')
     ssid5 = (config_parser.get('SSID', 'ssid5')).split(',')
     id24 = 'wifinfo_24'
@@ -120,7 +120,7 @@ def set_ssid(driver, config_parser):
                   )
 
     def input_ssid(css_id, ssid):
-        logging.info(ssid)
+        logging.debug(ssid)
         script_page.open_url(driver, 'http://' + ssid_ip)
         script_page.login(driver, ssid_pw)
         a = ''

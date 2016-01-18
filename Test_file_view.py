@@ -62,7 +62,7 @@ def file_view_folders(driver, config_parser):
             for pat in path[1:]:
                 pat_xp = mk_xpath(pat)
                 driver.find_element_by_xpath(pat_xp).click()
-                logging.info('find : ' + str(pat))
+                logging.debug('find : ' + str(pat))
                 time.sleep(5)
             driver.find_element_by_css_selector("a.setup_return").click()
             time.sleep(5)
