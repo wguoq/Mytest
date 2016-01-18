@@ -183,7 +183,7 @@ def new_password(driver, config_parser):
 
 
 def qos(driver, config_parser):
-    logging.info('D1_QOS ')
+    logging.info('D1_QOS 在页面配置全局下载上传限制，然后验证下载上传速度')
     qos_ip = config_parser.get('Qos', 'qos_ip')
     qos_pw = config_parser.get('Qos', 'qos_pw')
     down_limit = config_parser.get('Qos', 'down_limit')
