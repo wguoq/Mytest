@@ -27,8 +27,7 @@ def initialize(driver, url, password, pppoe_user='', pppoe_pwd=''):
             for a in flag:
                 if tip.find(a) > -1:
                     return a
-        except Exception as e:
-            print(e)
+        except:
             return 0
     try:
         logging.debug('打开测试url')
